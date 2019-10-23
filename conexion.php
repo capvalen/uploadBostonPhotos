@@ -2,7 +2,7 @@
 $server="localhost";
 
 $username="lgafvdgr_fichas";
-$password="HkFw)N,PI=8&";
+$password="e]17{L(;5hpl";
 $db='lgafvdgr_boston'; 
 
 global $cadena;
