@@ -54,7 +54,7 @@ a{color: #c79121;}
 
 a:hover{color: #a5730d;}
 
-    #pPrecio{ border: 6px solid #890120!important; color: #890120; font-weight: 700; font-size: 1.6rem; }
+    #pPrecio{ border: 6px solid #890120!important; color: #890120; font-weight: 700; font-size: 1.8rem; }
 
 .col-7 { max-width: 54.5%; }
 
@@ -72,7 +72,7 @@ a:hover{color: #a5730d;}
     padding-bottom: 1px;}
 
 #containerPadre, .border-abregu{
-  border: 3px solid #C59641!important;
+  border: 7px solid #C59641!important;
 }
 
 </style>
@@ -131,7 +131,7 @@ a:hover{color: #a5730d;}
 
     <div class="col text-center">
 
-      <img src="images/logo.png?v=1.0.2" style="padding-top:2px" >
+      <img src="images/logo.png?v=1.0.3" style="padding-top:2px" >
 
       <p class="p-0 m-0"><strong>BIENES RAICES</strong></p>
 
@@ -226,7 +226,7 @@ a:hover{color: #a5730d;}
 
     <div class="col-5 rounded border border-abregu p-2 ml-1">
 
-       <p class="float-right p-3" id="pPrecio"> <?= $row['fichPrecio'];?></p><br>
+       <p class="float-right py-1 px-3" id="pPrecio"> <?= $row['fichPrecio'];?></p><br>
 
       <p class="text-uppercase"><strong>Dirección: </strong> <span><?= $row['fichDireccion'];?></span> </p>
 
@@ -312,7 +312,7 @@ a:hover{color: #a5730d;}
 
 
   <?php if(isset($_GET['asesor'])): ?>
-  <div class="row mb-3 pl-1 mt-0" id="divAsesor">
+  <div class="row mb-1 pl-1 mt-0" id="divAsesor">
 
     <div class="col-4  rounded border border-abregu p-1 mr-1 ml-0">
 
@@ -346,15 +346,15 @@ a:hover{color: #a5730d;}
 
         <div class="col-8"><br>
 
-          <h4>BOSTON  ABREGU REALTY</h4>
+          <h4 style="font-weight: 600;">BOSTON  ABREGU REALTY</h4>
 
           <h5>Jr. San Antonio N° 260 – San Carlos</h5>
 
           <h5>Tel. Oficina: (064) 217  255</h5>
         <h5>Correo: contacto@bostonabregurealty.com</h5>
 
-            <h4 class="mt-2">Facebook: bostonabregurealty</h4>
-            <h4 class="mt-0 ">WWW.BOSTONABREGUREALTY.COM</h4>
+            <h4 style="font-weight: 600;" class="mt-2">Facebook: bostonabregurealty</h4>
+            <h4 style="font-weight: 600;" class="mt-0 ">WWW.BOSTONABREGUREALTY.COM</h4>
         </div>
 
         <div class="col-3 d-flex align-items-center">
