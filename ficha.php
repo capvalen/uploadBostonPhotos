@@ -28,7 +28,7 @@
 <body>
 
 <style>
-*, body, h1,h2,h3,h4,h5,p{font-family: 'Barlow Semi Condensed', sans-serif;}
+*, body, h1,h2,h3,h4,h5,p{font-family: 'Impact',  /*'Barlow Semi Condensed',*/ sans-serif;}
     
 img{max-width: 100vh;}
 
@@ -48,13 +48,13 @@ p{margin-bottom: .4rem;}
 
 }
 
-#h3Titulo{color: #890120;}
+#h3Titulo, #h4Vino{color: #890120;}
     
 a{color: #c79121;}
 
 a:hover{color: #a5730d;}
 
-    #pPrecio{ border: 6px solid #890120!important; color: #890120; font-weight: 700; font-size: 1.8rem; }
+    #pPrecio{display: inline-block; border: 6px solid #890120!important; color: #890120; font-weight: 700; font-size: 1.8rem; }
 
 .col-7 { max-width: 54.5%; }
 
@@ -74,6 +74,7 @@ a:hover{color: #a5730d;}
 #containerPadre, .border-abregu{
   border: 7px solid #C59641!important;
 }
+#colLogo{ width: 30%;}
 
 </style>
 
@@ -131,7 +132,7 @@ a:hover{color: #a5730d;}
 
     <div class="col text-center">
 
-      <img src="images/logo.png?v=1.0.3" style="padding-top:2px" >
+      <div id="colLogo" style="margin: 0 auto;"><img src="images/logo.png?v=1.0.3" class="img-fluid" style="padding-top:2px" ></div>
 
       <p class="p-0 m-0"><strong>BIENES RAICES</strong></p>
 
@@ -204,7 +205,7 @@ a:hover{color: #a5730d;}
 
   <div class="row my-2 divCinta"></div>
 
-  <h4 class="text-center"><strong>AHORA ES MÁS FÁCIL EN HUANCAYO VENDER, COMPRAR Y ALQUILAR SU PROPIEDAD CON GARANTÍA</strong></h4>
+  <h4 class="text-center" id="h4Vino"><strong>AHORA ES MÁS FÁCIL EN HUANCAYO VENDER, COMPRAR Y ALQUILAR SU PROPIEDAD CON GARANTÍA</strong></h4>
 
   
 
@@ -225,8 +226,9 @@ a:hover{color: #a5730d;}
                                 if(file_exists($foto1.".jpeg")){ echo $foto1.".jpeg"; } ?>"  class="img-fluid"></div>
 
     <div class="col-5 rounded border border-abregu p-2 ml-1">
-
-       <p class="float-right py-1 px-3" id="pPrecio"> <?= $row['fichPrecio'];?></p><br>
+      <div class="d-flex justify-content-center ">
+       <p class="py-1 px-3" id="pPrecio"> <?= $row['fichPrecio'];?></p>
+       </div>
 
       <p class="text-uppercase"><strong>Dirección: </strong> <span><?= $row['fichDireccion'];?></span> </p>
 
@@ -302,10 +304,8 @@ a:hover{color: #a5730d;}
 
     <div class="col my-1 rounded border border-abregu p-2 mr-1 text-justify">
 
-      <p class="text-uppercase"><strong>Descripción:</strong></p>
-
-        <span><?= str_replace(array("\r\n", "\n\r", "\r", "\n"), "<br />", $row['fichDescipcion']);?></span>
-
+      <div class="text-uppercase"> <h5><strong>Descripción:</strong></h5> </div>
+      <div class="px-4"><?= str_replace(array("\r\n", "\n\r", "\r", "\n"), "<br />", $row['fichDescipcion']);?></div>
     </div>
 
   </div>
