@@ -1,10 +1,12 @@
-<?php 
+<?php
 $server="localhost";
 
-$username="lgafvdgr_fichas";
-$password="e]17{L(;5hpl";
-$db='lgafvdgr_boston'; 
+/* Net	*/
+$username="root";
+$password="*123456*";
+$db='asistencias';
 
+global $conection;
 global $cadena;
 
 $conection= mysqli_connect($server,$username,$password)or die("No se ha podido establecer la conexion");
