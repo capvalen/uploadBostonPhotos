@@ -28,7 +28,7 @@
 <body>
 
 <style>
-*, body, h1,h2,h3,h4,h5,p{font-family: 'Impact',  /*'Barlow Semi Condensed',*/ sans-serif;}
+
     
 img{max-width: 100vh;}
 
@@ -45,16 +45,16 @@ p{margin-bottom: .4rem;}
   img{max-width: 30vh;}
 
   .divCinta{ height: 7px!important; background-color: #C59641!important; -webkit-print-color-adjust: exact; }
-
+	#fondoNegro{background: #1f191b!important; color:white!important; -webkit-print-color-adjust: exact; }
 }
 
-#h3Titulo, #h4Vino{color: #890120;}
+#h3Titulo, #h4Vino{color: #ae2c1a;}
     
 a{color: #c79121;}
 
 a:hover{color: #a5730d;}
 
-    #pPrecio{display: inline-block; border: 6px solid #890120!important; color: #890120; font-weight: 700; font-size: 1.8rem; }
+    #pPrecio{ border: 6px solid #ae2c1a!important; color: #ae2c1a; font-weight: 700; font-size: 1.8rem!important; }
 
 .col-7 { max-width: 54.5%; }
 
@@ -65,17 +65,19 @@ a:hover{color: #a5730d;}
 .col-8 { max-width: 67%; }
 
 .col-5 { max-width: 44%; flex: 0 0 44%!important; }
-
+/*#row1 p, #divContenido {font-size: 1.1rem;}
+*/
 #divAsesor p{  margin-bottom: 0.1rem; }
-#fotoEmpleado{     max-height: 99%;
+#fotoEmpleado{ max-height: 99%;
     margin-top: 1px;
     padding-bottom: 1px;}
 
 #containerPadre, .border-abregu{
-  border: 7px solid #C59641!important;
+  border: 4px solid #C59641!important;
 }
-#colLogo{ width: 30%;}
-
+#colLogo{ width: 35%;}
+#fondoNegro{background: #1f191b; color:white;}
+#spanCorreo{ font-size: 0.8rem; }
 </style>
 
 <!-- As a heading -->
@@ -124,7 +126,7 @@ a:hover{color: #a5730d;}
 
 
 
-<div class="container-fluid pt-0" id="containerPadre">
+<div class="container-fluid pt-0 px-0" id="containerPadre">
 
 
 
@@ -203,17 +205,19 @@ a:hover{color: #a5730d;}
 
 ?>
 
-  <div class="row my-2 divCinta"></div>
+  <div class="row mt-2 divCinta"></div>
 
-  <h4 class="text-center" id="h4Vino"><strong>AHORA ES MÁS FÁCIL EN HUANCAYO VENDER, COMPRAR Y ALQUILAR SU PROPIEDAD CON GARANTÍA</strong></h4>
+  <div class="p-2" id="fondoNegro">
+  	<h4 class="text-center m-0"><strong>AHORA ES MÁS FÁCIL EN HUANCAYO VENDER,<br> COMPRAR Y ALQUILAR SU PROPIEDAD CON GARANTÍA</strong></h4>
+  </div>
 
   
 
-  <div class="row mt-3 divCinta"></div>
+  <div class="row divCinta"></div>
 
   <div class='row p-3 text-center justify-content-center'><h3 class="m-0" id="h3Titulo"><strong>INFORMACIÓN DE LA PROPIEDAD</strong></h3></div>
 
-  <div class="row mb-1">
+  <div class="row mb-1 px-3" id="row1">
 
     <div class="col-7 rounded border border-abregu p-0 mr-1 ml-1"><img src="<?php
 
@@ -226,8 +230,8 @@ a:hover{color: #a5730d;}
                                 if(file_exists($foto1.".jpeg")){ echo $foto1.".jpeg"; } ?>"  class="img-fluid"></div>
 
     <div class="col-5 rounded border border-abregu p-2 ml-1">
-      <div class="d-flex justify-content-center ">
-       <p class="py-1 px-3" id="pPrecio"> <?= $row['fichPrecio'];?></p>
+      <div class=" ">
+       <p class="float-right py-1 px-3 ml-3" id="pPrecio"> <?= $row['fichPrecio'];?></p>
        </div>
 
       <p class="text-uppercase"><strong>Dirección: </strong> <span><?= $row['fichDireccion'];?></span> </p>
@@ -250,71 +254,50 @@ a:hover{color: #a5730d;}
 
   </div>
 
-  <!-- <div class="row my-3 rounded border border-abregu p-2 mr-2"></div>
+  <div class="row mb-1 px-3" id="row2">
 
-  <div class="row mb-3">
+    <div class="col-7  p-0 mr-1 ml-1">
 
-    <div class="col-6 rounded border border-abregu p-2 mr-2">
-
-      
-
-    </div>
-
-    <div class="col-6 rounded border border-abregu p-2 ml-2">
-
-      <img src="images/inmuebles/GYM.RGB_color.0000.jpg" class="img-fluid">
-
-    </div>
-
-  </div> -->
-
-  <div class="row mb-1">
-
-    <div class="col ml-1 pl-0 pr-1">
-
-      <div class="my-1 rounded border border-abregu p-0 mx-1 mb-2">
-
+    	<div class="rounded border border-abregu ">
         <img src="<?php
 
                                 $foto2= './images/inmuebles/'.$_GET['cursor']."_foto2";
 
-                                if(file_exists($foto1.".jpg")){ echo $foto2.".jpg"; } 
+                                if(file_exists($foto2.".jpg")){ echo $foto2.".jpg"; } 
 
-                                if(file_exists($foto1.".png")){ echo $foto2.".png"; } 
+                                if(file_exists($foto2.".png")){ echo $foto2.".png"; } 
 
-                                if(file_exists($foto1.".jpeg")){ echo $foto2.".jpeg"; } ?>" class="img-fluid">
-
-      </div>
-
-      <div class="my-1 rounded border border-abregu p-0 mx-1">
+                                if(file_exists($foto2.".jpeg")){ echo $foto2.".jpeg"; } ?>" class="img-fluid">
+		</div>
+      <div class="my-1 rounded border border-abregu ">
 
         <img src="<?php
 
                                 $foto3= './images/inmuebles/'.$_GET['cursor']."_foto3";
 
-                                if(file_exists($foto1.".jpg")){ echo $foto3.".jpg"; } 
+                                if(file_exists($foto3.".jpg")){ echo $foto3.".jpg"; } 
 
-                                if(file_exists($foto1.".png")){ echo $foto3.".png"; } 
+                                if(file_exists($foto3.".png")){ echo $foto3.".png"; } 
 
-                                if(file_exists($foto1.".jpeg")){ echo $foto3.".jpeg"; } ?>" class="img-fluid">
+                                if(file_exists($foto3.".jpeg")){ echo $foto3.".jpeg"; } ?>" class="img-fluid">
 
       </div>
 
     </div>
 
-    <div class="col my-1 rounded border border-abregu p-2 mr-1 text-justify">
+    <div class="col-5 my-1 rounded border border-abregu p-2 ml-1 text-justify" id="rowDescripcion">
 
       <div class="text-uppercase"> <h5><strong>Descripción:</strong></h5> </div>
-      <div class="px-4"><?= str_replace(array("\r\n", "\n\r", "\r", "\n"), "<br />", $row['fichDescipcion']);?></div>
+      <div class="px-4" id="divContenido"><?= str_replace(array("\r\n", "\n\r", "\r", "\n"), "<br />", $row['fichDescipcion']);?></div>
     </div>
 
   </div>
 
 
   <?php if(isset($_GET['asesor'])): ?>
-  <div class="row mb-1 pl-1 mt-0" id="divAsesor">
+  <div class="row mb-1 px-3 mt-0" id="divAsesor">
 
-    <div class="col-4  rounded border border-abregu p-1 mr-1 ml-0">
+    <div class="col-4 rounded border border-abregu p-1 mr-1 ml-1">
 
       <p class="text-center text-uppercase"><strong>Asesor Inmobiliario</strong></p>
 
@@ -336,13 +319,13 @@ a:hover{color: #a5730d;}
 
       <p class="text-uppercase"><strong>Celular: </strong> <?= $rowAsesor['aseCelular'];?></p>
 
-      <p class="text-uppercase"><strong>Correo: </strong> <?= $rowAsesor['aseCorreo'];?> </p>
+      <p class="text-uppercase"><strong>Correo: </strong> <span id="spanCorreo"><?= $rowAsesor['aseCorreo'];?></span> </p>
 
     </div>
 
-    <div class="col-8 rounded border border-abregu p-1 ml-1">
+    <div class="col-8 rounded border border-abregu ml-1">
 
-      <div class="row d-flex align-items-center">
+      <!-- <div class="row d-flex align-items-center">
 
         <div class="col-8"><br>
 
@@ -361,7 +344,8 @@ a:hover{color: #a5730d;}
 
           <img src="images/qr.png" width="230" height="230" class="img-fluid">
 
-        </div>
+        </div> -->
+        <img src="images/firma.png" class="img-fluid">
 
       </div>
 
