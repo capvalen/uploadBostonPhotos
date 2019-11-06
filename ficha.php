@@ -42,7 +42,7 @@ p{margin-bottom: .4rem;}
 
 @media print{
 
-  img{max-width: 30vh;}
+  img{max-width: 60vh;}
 
   .divCinta{ height: 7px!important; background-color: #C59641!important; -webkit-print-color-adjust: exact; }
 	#fondoNegro{background: #1f191b!important; color:white!important; -webkit-print-color-adjust: exact; }
@@ -75,7 +75,7 @@ a:hover{color: #a5730d;}
 #containerPadre, .border-abregu{
   border: 4px solid #C59641!important;
 }
-#colLogo{ width: 35%;}
+#colLogo{ width: 50%;}
 #fondoNegro{background: #1f191b; color:white;}
 #spanCorreo{ font-size: 0.8rem; }
 </style>
@@ -345,7 +345,7 @@ a:hover{color: #a5730d;}
           <img src="images/qr.png" width="230" height="230" class="img-fluid">
 
         </div> -->
-        <img src="images/firma.png" class="img-fluid">
+        <img src="images/firma.png?v=1" class="img-fluid">
 
       </div>
 
