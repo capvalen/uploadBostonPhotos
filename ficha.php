@@ -1,4 +1,6 @@
-<?php include "conexion.php"; ?>
+<?php include "conexion.php";
+session_cache_limiter('none');
+ ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -69,6 +71,7 @@ a:hover{color: #a5730d;}
 #colLogo{ width: 54%;}
 #fondoNegro{background: #1f191b; color:white;}
 #spanCorreo{ font-size: 0.7rem; }
+.spanEliminar:hover{cursor:pointer}
 </style>
 
 <!-- As a heading -->
@@ -97,7 +100,7 @@ a:hover{color: #a5730d;}
 
 			<li class="nav-item">
 
-				<a class="nav-link" href="asesor.php">Nuevo asesor</a>
+				<a class="nav-link" href="asesor.php">Control de asesores</a>
 
 			</li>
 
@@ -213,13 +216,13 @@ a:hover{color: #a5730d;}
 
 		<div class="col-7 rounded border border-abregu p-0 mr-1 ml-1"><img src="<?php
 
-																$foto1= './images/inmuebles/'.$_GET['cursor']."_foto1";
+				$foto1= './images/inmuebles/'.$_GET['cursor']."_foto1";
 
-																if(file_exists($foto1.".jpg")){ echo $foto1.".jpg"; } 
+				if(file_exists($foto1.".jpg")){ echo $foto1.".jpg?token=".rand(1000, 99999); } 
 
-																if(file_exists($foto1.".png")){ echo $foto1.".png"; } 
+				if(file_exists($foto1.".png")){ echo $foto1.".png?token=".rand(1000, 99999); } 
 
-																if(file_exists($foto1.".jpeg")){ echo $foto1.".jpeg"; } ?>"  class="img-fluid"></div>
+				if(file_exists($foto1.".jpeg")){ echo $foto1.".jpeg?token=".rand(1000, 99999); } ?>"  class="img-fluid"></div>
 
 		<div class="col-5 rounded border border-abregu p-2 ml-1">
 			<div class=" ">
@@ -253,25 +256,25 @@ a:hover{color: #a5730d;}
 			<div class="rounded border border-abregu ">
 				<img src="<?php
 
-																$foto2= './images/inmuebles/'.$_GET['cursor']."_foto2";
+					$foto2= './images/inmuebles/'.$_GET['cursor']."_foto2";
 
-																if(file_exists($foto2.".jpg")){ echo $foto2.".jpg"; } 
+					if(file_exists($foto2.".jpg")){ echo $foto2.".jpg?token=".rand(1000, 99999); } 
 
-																if(file_exists($foto2.".png")){ echo $foto2.".png"; } 
+					if(file_exists($foto2.".png")){ echo $foto2.".png?token=".rand(1000, 99999); } 
 
-																if(file_exists($foto2.".jpeg")){ echo $foto2.".jpeg"; } ?>" class="img-fluid">
+					if(file_exists($foto2.".jpeg")){ echo $foto2.".jpeg?token=".rand(1000, 99999); } ?>" class="img-fluid">
 		</div>
 			<div class="my-1 rounded border border-abregu ">
 
 				<img src="<?php
 
-																$foto3= './images/inmuebles/'.$_GET['cursor']."_foto3";
+						$foto3= './images/inmuebles/'.$_GET['cursor']."_foto3";
 
-																if(file_exists($foto3.".jpg")){ echo $foto3.".jpg"; } 
+						if(file_exists($foto3.".jpg")){ echo $foto3.".jpg?token=".rand(1000, 99999); } 
 
-																if(file_exists($foto3.".png")){ echo $foto3.".png"; } 
+						if(file_exists($foto3.".png")){ echo $foto3.".png?token=".rand(1000, 99999); } 
 
-																if(file_exists($foto3.".jpeg")){ echo $foto3.".jpeg"; } ?>" class="img-fluid">
+						if(file_exists($foto3.".jpeg")){ echo $foto3.".jpeg?token=".rand(1000, 99999); } ?>" class="img-fluid">
 
 			</div>
 
@@ -385,7 +388,9 @@ a:hover{color: #a5730d;}
 				<input type="text" class="form-control" id="txtNuevoCochera">
 				<p>Descripción:</p>
 				<textarea name="" class="form-control" id="txtNuevoDescripcion" rows="12"></textarea>
-			
+			<form id="formUpload" action="uploadFotoxUno.php" method="post">
+				<div id="divImagenesPost"></div>
+			</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary" id="btnActualizar"> <i class="icofont-refresh"></i> Actualizar</button>
@@ -428,6 +433,9 @@ a:hover{color: #a5730d;}
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script> <!-- extraido de https://jquery-form.github.io/form/ -->
+
+
 
 
 
@@ -457,7 +465,8 @@ function borrarFicha(idFicha){
 function cambiarPrecio(idFicha, precio){
 	$.ajax({url: 'returnDetalleInmobiliaria.php', type: 'POST', data: { idFicha: idFicha }}).done(function(resp) {
 		//console.log(resp)
-		var data = JSON.parse(resp)[0];
+		var datos = JSON.parse(resp);  console.log(datos)
+		var data = datos[0]; 
 
 		$('#txtNuevoPrecio').val( data.fichPrecio);
 		$('#txtEditTitulo').val( data.fichTitulo);
@@ -470,6 +479,15 @@ function cambiarPrecio(idFicha, precio){
 		$('#txtNuevoBanios').val( data.fichBanios);
 		$('#txtNuevoCochera').val( data.fichCochera);
 		$('#txtNuevoDescripcion').val( data.fichDescipcion);
+		$('#divImagenesPost').children().remove();
+		for (let index = 1; index <= 3; index++) {
+			
+			if(datos[index].foto != ''){
+				$('#divImagenesPost').append(`<div class="row px-3 my-2" id="${index}"> <span class="text-danger spanEliminar" onclick="eliminarFoto('${datos[index].foto}', ${index})"><i class="icofont-close"></i></span> <img src="${datos[index].foto}" class="img-fluid col-4"><div>`); }
+			else{ $('#divImagenesPost').append(`<div class="row px-3 my-2" id="${index}"><input type="file" data-id="${data.idFicha}" class="form-control" accept="image/*" id="txtFoto${index}" name="txtFoto${index}"><div>`); }
+			
+		}
+
 
 
 		$('#btnActualizar').attr('data-id', idFicha);
@@ -498,6 +516,43 @@ $('#btnActualizar').click(function(){
 			alert('Hubo un error actualizando el precio, contáctelo a soporte.');
 		}
 	});
+});
+function eliminarFoto(link, index){
+	$.post('eliminarFoto.php', {link}).done(function (resp) {
+		console.log(resp);
+		if(resp=='ok'){
+			$('#divImagenesPost #'+index).remove();
+		}
+	})
+}
+$('#divImagenesPost').on('change', 'input', function (e) {
+	event.preventDefault();
+	var padre = $(this).parent();
+	$('#formUpload').ajaxSubmit({
+			data: {llave: $(this).attr('data-id')},
+			beforeSubmit: function () {
+					//$('#porcentajeSub').text("0%");
+			},
+			uploadProgress: function(event, position, total, percentageComplete){
+					//$('#porcentajeSub').text(percentageComplete + '%');
+					console.log(percentageComplete + '%')
+			},
+			success:function( resp ){ console.log(resp)
+				if(resp == 'ok'){
+					padre.children().remove();
+					padre.append(`Subido correctamente, actualice`);
+				}
+					/* if(resp=='vacio'){
+							$('#toastError').text("No se subieron las fotos por falta de fotos"); $('#tostadaError').toast('show');
+					}
+					if( $.isNumeric(resp)){
+							location.href = "ficha.php?cursor="+resp;
+					}
+					pantallaOver(false); */
+			},
+			//resetForm: true
+	});
+
 });
 
 <?php endif; ?>
