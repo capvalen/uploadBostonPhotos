@@ -15,6 +15,7 @@ session_cache_limiter('none');
 	<link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed:400,700&display=swap" rel="stylesheet">
 	<link rel="icon" type="image/vnd.microsoft.icon" href="images/favicon.ico">
 	<link rel="stylesheet" href="css/icofont.min.css">
+    <link rel="stylesheet" href="css/alertify.min.css"/>
 
 </head>
 
@@ -348,7 +349,7 @@ a:hover{color: #a5730d;}
 
 		<div class="col text-center"></div>
 
-	</div>
+	
 	<?php endif; ?>  
 
 </div>
@@ -435,7 +436,7 @@ a:hover{color: #a5730d;}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script> <!-- extraido de https://jquery-form.github.io/form/ -->
 
-
+<script src="js/alertify.min.js"></script>
 
 
 
@@ -453,12 +454,15 @@ a:hover{color: #a5730d;}
 <?php if($_COOKIE['ckPower']==1): ?>
 
 function borrarFicha(idFicha){
+    
+    alertify.confirm('¡Alerta!','¿Desea borrar éste registro?', function(){
+        //alertify.success('Ok')
+        $.ajax({url:"borrarficha.php", type: 'POST', data:{ficha:idFicha}}).done(function(resp){
+            location.reload();
+        })
+    }, function(){ /*alertify.error('Cancel')*/ });
 
-	$.ajax({url:"borrarficha.php", type: 'POST', data:{ficha:idFicha}}).done(function(resp){
-
-		location.reload();
-
-	})
+	
 
 }
 
