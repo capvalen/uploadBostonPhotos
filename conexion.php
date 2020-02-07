@@ -1,9 +1,9 @@
 <?php 
 $server="localhost";
 
-$username="lgafvdgr_fichas";
-$password="e]17{L(;5hpl";
-$db='lgafvdgr_boston'; 
+$username="root";
+$password="";
+$db='bostonabregu'; 
 
 global $cadena;
 

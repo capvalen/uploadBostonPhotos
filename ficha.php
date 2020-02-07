@@ -69,10 +69,14 @@ a:hover{color: #a5730d;}
 #containerPadre, .border-abregu{
 	border: 4px solid #C59641!important;
 }
-#colLogo{ width: 54%;}
+#colLogo{ width: 50%;}
 #fondoNegro{background: #1f191b; color:white;}
 #spanCorreo{ font-size: 0.7rem; }
 .spanEliminar:hover{cursor:pointer}
+#txtBuscador::placeholder{font-family: 'Icofont', -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"}
+#divCodigoF{position: absolute;
+    bottom: 0;
+    right: 0;}
 </style>
 
 <!-- As a heading -->
@@ -140,6 +144,16 @@ a:hover{color: #a5730d;}
 <?php if(!isset($_GET['cursor'])){ ?>
 
 <div class="container">
+	<div class="row my-3 d-flex justify-content-end">
+	<div class="card ">
+		<div class="card-body">
+			<div class="form-inline">
+				<label class="" for="inlineFormInputName2">Buscador:</label>
+				<input type="text" class="form-control mb-2 mx-2" id="txtBuscador" placeholder="&#xed11;">
+			</div>
+		</div>
+	</div>
+	</div>
 
 		<div class="row">
 
@@ -151,28 +165,31 @@ a:hover{color: #a5730d;}
 
 								<tr>
 
-										<th>N°</th> <th>Título de inmueble</th><th>Precio</th>
+										<th>N°</th> <th>Cod.</th> <th>Título de inmueble</th><th>Precio</th> <th>@</th>
 
 								</tr>
 
 						</thead>
 
-						<?php $sqlInmueble="SELECT `idFicha`, `fichTitulo`, `fichPrecio` FROM `fichas` WHERE `fichActivo`=1 order by fichFechaAuto desc; "; 
+						<?php $sqlInmueble="SELECT `idFicha`, lower(`fichTitulo`) as fichTitulo, `fichPrecio` FROM `fichas` WHERE `fichActivo`=1 order by trim(fichTitulo) asc; "; 
 
 						$resultadoInmueble=$cadena->query($sqlInmueble); $i=1; ?>
 
-						<tbody>
+						<tbody id="tbodyBienes">
 
 								<?php while($rowInmueble=$resultadoInmueble->fetch_assoc()){ ?>
 
 								<tr>
 
-										<td><?= $i; ?></td> <td><a class="text-decoration-none" href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= $rowInmueble['fichTitulo']; ?></a></td><td><?= $rowInmueble['fichPrecio']; ?> <?php if($_COOKIE['ckPower']==1): ?>
+										<th><?= $i;?></th>
+										<td class="tdCode"><a href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= "BR-".str_pad($rowInmueble['idFicha'], 4, 0, STR_PAD_LEFT); ?></a></td>
 
-									<button class="btn button btn-outline-success btn-sm" onClick="cambiarPrecio(<?= $rowInmueble['idFicha']; ?>, '<?= $rowInmueble['fichPrecio']; ?>');" ><i class="icofont-edit"></i></button>  
-									<button class="btn button btn-outline-danger btn-sm" onClick="borrarFicha(<?= $rowInmueble['idFicha']; ?>);" ><i class="icofont-trash"></i></button>  
-
-								<?php endif; ?></td>
+										<td class="tdTitulo"><a class="text-decoration-none text-capitalize" href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= $rowInmueble['fichTitulo']; ?></a></td>
+										<td class="tdPrecio"><?= $rowInmueble['fichPrecio']; ?></td>
+								<?php if($_COOKIE['ckPower']==1): ?>
+								<td><button class="btn button btn-outline-success btn-sm" onClick="cambiarPrecio(<?= $rowInmueble['idFicha']; ?>, '<?= $rowInmueble['fichPrecio']; ?>');" ><i class="icofont-edit"></i></button>  
+									<button class="btn button btn-outline-danger btn-sm" onClick="borrarFicha(<?= $rowInmueble['idFicha']; ?>);" ><i class="icofont-trash"></i></button>  </td>
+							<?php endif; ?>
 
 								
 
@@ -183,6 +200,7 @@ a:hover{color: #a5730d;}
 						</tbody>
 
 				</table>
+				<p class="d-none" id="pNoHay">No hay coincidencias</p>
 
 		</div>
 
@@ -211,7 +229,7 @@ a:hover{color: #a5730d;}
 
 	<div class="row divCinta"></div>
 
-	<div class='row p-2 text-center justify-content-center'><h3 class="m-0" id="h3Titulo"><strong>INFORMACIÓN   DE   LA   PROPIEDAD</strong></h3></div>
+	<div class='row p-2 text-center justify-content-center'><h3 class="m-0" id="h3Titulo"><strong>INFORMACIÓN   DE   LA   PROPIEDAD  -  CÓDIGO: BR-<?= str_pad($_GET['cursor'], 4, 0, STR_PAD_LEFT);?></strong></h3></div>
 
 	<div class="row mb-1 px-3" id="row1">
 
@@ -245,6 +263,7 @@ a:hover{color: #a5730d;}
 			<p class="text-uppercase"><strong>Baños: </strong> <span><?= $row['fichBanios'];?></span></p>
 
 			<p class="text-uppercase"><strong>Cochera: </strong> <span><?= $row['fichCochera'];?></span></p>
+			
 
 		</div>
 
@@ -557,6 +576,28 @@ $('#divImagenesPost').on('change', 'input', function (e) {
 			//resetForm: true
 	});
 
+});
+
+$('#txtBuscador').keyup(function(e) {
+	if( $('#txtBuscador').val()==''){
+		$.each( $('#tbodyBienes tr') , function(i, objeto){
+			$(objeto).removeClass('d-none');
+		});
+		$('#pNoHay').addClass('d-none');
+	}else{
+		$.each( $('#tbodyBienes tr') , function(i, objeto){
+			//console.log( $(objeto).find('.tdTitulo').text() )
+			
+			if( ~$(objeto).find('.tdCode').text().toLowerCase().indexOf( $('#txtBuscador').val()) || ~$(objeto).find('.tdTitulo').text().toLowerCase().indexOf( $('#txtBuscador').val())  ){
+				$(objeto).removeClass('d-none');
+			}else{
+				$(objeto).addClass('d-none');
+			}
+
+			
+		});
+		//$('#pNoHay').removeClass('d-none');
+	}
 });
 
 <?php endif; ?>
