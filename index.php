@@ -12,21 +12,30 @@
 <body>
 <style>
 	body{
-		background-color: #eee;
+		background-color:#1a1a1a; /* #eee */; min-height: 100vh;
 	}
-	.card{border-radius: .45rem;}
+	.card{border-radius: .45rem;
+		box-shadow: rgb(178 136 65) 0px 4px 12px
+	}
 </style>
-<section class="p-5 m-5">
+<section class="d-flex align-items-center justify-content-center" style="min-height: 90vh;">
 	<div class="container p-3 col-sm-4">
 		<div class="card">
-			<div class="card-body">
-				<h5 class="card-title text-primary"><div align="center"><img src="http://www.bostonabregurealty.com/images/BOTONES/logo2018.jpg" alt="a" width="249" height="183"></div></h5>
-			  <label class="text-muted text-center" for=""><i class="icofont-ui-user"></i> Usuario</label>
-				<input type="text" class="form-control" id="txtNegocioLog" value="">
-				<label class="text-muted text-center mt-2" for=""><i class="icofont-key"></i> Password</label>
-				<input type="password" class="form-control" id="txtlocalLog" value="">
-				<button class="btn btn-outline-primary mt-3 btn-block " id="btnAcceder"><i class="icofont-key-hole"></i> Acceder</button>
+			<div class="card-body py-5">
+				<h5 class="card-title text-primary"><div align="center"><img class="img-fluid" src="https://bostonabregurealty.com/wp-content/uploads/2021/04/logo-boston-retina.png" alt="Logo Boston Abregú"></div></h5>
+			  <div class="px-5">
+					<label class="text-muted text-center" for=""><i class="icofont-user"></i> Usuario</label>
+					<input type="text" class="form-control" id="txtNegocioLog" value="">
+					<label class="text-muted text-center mt-2" for=""><i class="icofont-finger-print"></i> Constraseña</label>
+					<input type="password" class="form-control" id="txtlocalLog" value="">
+				</div>
+				<div class="text-center">
+					<button class="btn btn-outline-secondary mt-3 mx-auto " id="btnAcceder"><i class="icofont-sign-in"></i> Ingresar</button>
+				</div>
 				<div id="divError"><span id="spanError2"></span></div>
+				<div class="text-center text-muted mt-2">
+					<small >Versión 1.26 Build 24.0321</small>
+				</div>
 			</div>
 		</div> 
 		

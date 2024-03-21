@@ -6,124 +6,12 @@ session_cache_limiter('none');
 <html lang="es">
 
 <head>
-
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Boston Abregú Realty - BIENES RAICES</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">  
-	<link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed:400,700&display=swap" rel="stylesheet">
-	<link rel="icon" type="image/vnd.microsoft.icon" href="images/favicon.ico">
-	<link rel="stylesheet" href="css/icofont.min.css">
-    <link rel="stylesheet" href="css/alertify.min.css"/>
-
+	<?php include "headers.php"; ?>
 </head>
 
 <body>
-
-<style>
-
-		
-img{max-width: 100vh;}
-
-.divCinta{ height: 5px; background-color: #C59641; }
-
-p{margin-bottom: .4rem;}
-
-.divFoto, .divSello{ width: 40%; height: 130px; margin: 0 auto; border: 2px solid #C59641!important;  }
-
-.divSello{height: 250px; width: 100%;}
-
-@media print{
-
-	img{max-width: 70vh;}
-
-	.divCinta{ height: 7px!important; background-color: #C59641!important; -webkit-print-color-adjust: exact; }
-	#fondoNegro{background: #1f191b!important; color:white!important; -webkit-print-color-adjust: exact; }
-}
-
-#h3Titulo, #h4Vino{color: #B12E1B;}
-		
-a{color: #c79121;}
-
-a:hover{color: #a5730d;}
-
-		#pPrecio{ border: 6px solid #B12E1B!important; color: #B12E1B; font-weight: 700; font-size: 1.8rem!important; }
-
-.col-7 { max-width: 54.5%; }
-
-.col-6 { max-width: 49%; }
-
-.col-4 { max-width: 32%; }
-
-.col-8 { max-width: 67%; }
-
-.col-5 { max-width: 44%; flex: 0 0 44%!important; }
-/*#row1 p, #divContenido {font-size: 1.1rem;}
-*/
-#divAsesor p{  margin-bottom: 0.1rem; }
-#fotoEmpleado{ max-height: 99%;
-		margin-top: 1px;
-		padding-bottom: 1px;}
-
-#containerPadre, .border-abregu{
-	border: 4px solid #C59641!important;
-}
-#colLogo{ width: 50%;}
-#fondoNegro{background: #1f191b; color:white;}
-#spanCorreo{ font-size: 0.7rem; }
-.spanEliminar:hover{cursor:pointer}
-#txtBuscador::placeholder{font-family: 'Icofont', -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"}
-#divCodigoF{position: absolute;
-    bottom: 0;
-    right: 0;}
-</style>
-
 <!-- As a heading -->
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-	<span class="navbar-brand mb-0 h1">Boston Abregú Realty</span>
-
-	<div class="collapse navbar-collapse">
-
-		<ul class="navbar-nav mr-auto">
-
-			<li class="nav-item active">
-
-				<a class="nav-link" href="ficha.php">Fichas </a>
-
-			</li>
-
-			<?php if($_COOKIE['ckPower']=="1"): ?>
-
-			<li class="nav-item">
-
-				<a class="nav-link" href="subida.php">Nueva ficha</a>
-
-			</li>
-
-			<li class="nav-item">
-
-				<a class="nav-link" href="asesor.php">Control de asesores</a>
-
-			</li>
-
-			 <?php endif;?>
-
-			 <li class="nav-item">
-
-				<a class="nav-link" href="desconectar.php">Desconectar</a>
-
-			</li>
-
-		</ul>
-
-	</div>
-
-</nav>
-
-
+<?php require "nav.php"; ?>
 
 <div class="container-fluid pt-0 px-0" id="containerPadre">
 
@@ -161,49 +49,37 @@ a:hover{color: #a5730d;}
 
 				<table class="table table-hover">
 
-						<thead>
-
-								<tr>
-
-										<th>N°</th> <th>Cod.</th> <th>Título de inmueble</th><th>Precio</th> <th>@</th>
-
-								</tr>
-
-						</thead>
+					<thead>
+						<tr>
+								<th>N°</th> <th>Cod.</th> <th>Título de inmueble</th><th>Precio</th> <th>@</th>
+						</tr>
+					</thead>
 
 						<?php $sqlInmueble="SELECT `idFicha`, lower(`fichTitulo`) as fichTitulo, `fichPrecio` FROM `fichas` WHERE `fichActivo`=1 order by trim(fichTitulo) asc; "; 
 
 						$resultadoInmueble=$cadena->query($sqlInmueble); $i=1; ?>
+					<tbody id="tbodyBienes">
+						<?php while($rowInmueble=$resultadoInmueble->fetch_assoc()){ ?>
+						<tr>
 
-						<tbody id="tbodyBienes">
+							<th><?= $i;?></th>
+							<td class="tdCode"><a href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= "BR-".str_pad($rowInmueble['idFicha'], 4, 0, STR_PAD_LEFT); ?></a></td>
 
-								<?php while($rowInmueble=$resultadoInmueble->fetch_assoc()){ ?>
-
-								<tr>
-
-										<th><?= $i;?></th>
-										<td class="tdCode"><a href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= "BR-".str_pad($rowInmueble['idFicha'], 4, 0, STR_PAD_LEFT); ?></a></td>
-
-										<td class="tdTitulo"><a class="text-decoration-none text-capitalize" href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= $rowInmueble['fichTitulo']; ?></a></td>
-										<td class="tdPrecio"><?= $rowInmueble['fichPrecio']; ?></td>
+							<td class="tdTitulo"><a class="text-decoration-none text-capitalize" href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= $rowInmueble['fichTitulo']; ?></a></td>
+							<td class="tdPrecio"><?= $rowInmueble['fichPrecio']; ?></td>
+							<td>
+								<button class="btn btn-outline-primary btn-sm" title="Comentarios" onclick="abrirModalComentarios(<?= $rowInmueble['idFicha']; ?>, '<?= $rowInmueble['fichTitulo']?>')"><i class="icofont-chat"></i></button>
 								<?php if($_COOKIE['ckPower']==1): ?>
-								<td><button class="btn button btn-outline-success btn-sm" onClick="cambiarPrecio(<?= $rowInmueble['idFicha']; ?>, '<?= $rowInmueble['fichPrecio']; ?>');" ><i class="icofont-edit"></i></button>  
-									<button class="btn button btn-outline-danger btn-sm" onClick="borrarFicha(<?= $rowInmueble['idFicha']; ?>);" ><i class="icofont-trash"></i></button>  </td>
-							<?php endif; ?>
-
-								
-
-								</tr>
-
-								<?php $i++; } ?>
-
+									<button class="btn button btn-outline-success btn-sm" title="Nuevo precio" onclick="cambiarPrecio(<?= $rowInmueble['idFicha']; ?>, '<?= $rowInmueble['fichPrecio']; ?>');" ><i class="icofont-edit"></i></button>
+									<button class="btn button btn-outline-danger btn-sm" title="Eliminar" onclick="borrarFicha(<?= $rowInmueble['idFicha']; ?>);" ><i class="icofont-trash"></i></button>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<?php $i++; } ?>
 						</tbody>
-
 				</table>
 				<p class="d-none" id="pNoHay">No hay coincidencias</p>
-
 		</div>
-
 </div>
 
 <?php } else{ 
@@ -325,8 +201,7 @@ a:hover{color: #a5730d;}
 			<div class="divFoto text-center">
 
 				<img id="fotoEmpleado" src="<?php $foto1= './images/empleado/'.$_GET['asesor']."_foto1";
-
-																if(file_exists($foto1.".jpg")){ echo $foto1.".jpg"; }else{ echo "images/empleado/user.png";}  ?>" class="img-fluid" style="max-height: 100%;">
+				if(file_exists($foto1.".jpg")){ echo $foto1.".jpg"; }else{ echo "images/empleado/user.png";}  ?>" class="img-fluid" style="max-height: 100%;">
 
 			</div>
 
@@ -375,9 +250,38 @@ a:hover{color: #a5730d;}
 
 <?php  } } ?>
 
-	
-<div class="modal fade" id="modalNuevoPrecio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
+
+<!-- Modal para ver comentarios -->
+<div class="modal fade" id="modalComentarios" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header border-0">
+				<h5 class="modal-title" id="exampleModalLabel">Comentarios de la ficha</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p><strong>Ficha escogida:</strong> <span class="text-capitalize" id="mcTitulo"></span></p>
+				<div class="row">
+					<div class="col">
+						<label for="txtComentarioNew">Comentario nuevo:</label>
+						<textarea class="form-control" id="txtComentarioNew" rows="2"></textarea>
+					</div>
+					<div class="col-1 d-flex align-items-center">
+						<button class="btn btn-outline-primary" onclick="agregarComentario()"><i class="icofont-plus"></i></button>
+					</div>
+				</div>
+				<p class="mt-2"><strong>Comentarios:</strong></p>
+				<div id="comentarios"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal para ver comentarios -->
+<div class="modal fade" id="modalNuevoPrecio" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalCenterTitle"><i class="icofont-edit"></i> Editar inmueble</h5>
@@ -408,26 +312,31 @@ a:hover{color: #a5730d;}
 				<input type="text" class="form-control" id="txtNuevoCochera">
 				<p>Descripción:</p>
 				<textarea name="" class="form-control" id="txtNuevoDescripcion" rows="12"></textarea>
-			<form id="formUpload" action="uploadFotoxUno.php" method="post">
-				<div id="divImagenesPost"></div>
-			</form>
+				<form id="formUpload" action="uploadFotoxUno.php" method="post">
+					<div id="divImagenesPost"></div>
+				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary" id="btnActualizar"> <i class="icofont-refresh"></i> Actualizar</button>
-			</div>
+			</div>			
 		</div>
 	</div>
 </div>
 
 <?php if( isset($_GET['cursor']) && !isset($_GET['asesor'])): ?>
-<div class="modal fade" id="modalSeleccioneAsesor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-	<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+
+<!-- Modal para seleccionar asesor -->
+<div class="modal fade" id="modalSeleccioneAsesor" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalCenterTitle">Ver asesor</h5>
+				<h5 class="modal-title">Ver asesor</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
 			</div>
 			<div class="modal-body">
-				<p>¿Con qué asesor desea ver el inmueble?</p>
+			<p>¿Con qué asesor desea ver el inmueble?</p>
 				<select class="form-control text-capitalize" id="slpAsesor">
 					<?php $sqlAsesores = 'SELECT idAsesor, aseNombre from asesor where aseActivo =1 order by aseNombre asc;'; 
 					$resultadoAsesores = $cadena -> query($sqlAsesores);
@@ -444,20 +353,11 @@ a:hover{color: #a5730d;}
 </div>
 <?php endif; ?>
 
-
-
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script> <!-- extraido de https://jquery-form.github.io/form/ -->
-
 <script src="js/alertify.min.js"></script>
-
-
+<script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
 
 
 <script type="text/javascript">
@@ -600,10 +500,147 @@ $('#txtBuscador').keyup(function(e) {
 	}
 });
 
+async function eliminarComentario (id){
+	if(confirm('¿Desea eliminar el comentario?')){
+		let datos = new FormData()
+		datos.append('pedir', 'eliminar')
+		datos.append('id', id)
+		let response = await fetch('api/Comentarios.php', {
+			method:'POST', body:datos
+		})
+		const serv = await response.json()
+		if(serv.mensaje){
+			alertify.message('Eliminado correctamente')
+			let queFicha = $('#mcTitulo').attr('data-id')
+			listarComentarios(queFicha)
+		}
+		else alertify.error('No se pudo borrar')
+			
+		
+	}
+}
+<?php else: ?>
+	function eliminarComentario(id){
+		alertify.error('No tiene permisos para eliminar comentarios')
+	}
 <?php endif; ?>
 
-</script>
+function abrirModalComentarios(idFicha, titulo){
+	console.log('abrir')
+	$('#comentarios').html('')
+	$('#mcTitulo').text(titulo)
+	$('#mcTitulo').attr('data-id', idFicha)
+	$('#modalComentarios').modal('show')
 
+	listarComentarios(idFicha);
+}
+
+function agregarComentario(){
+	let queFicha = $('#mcTitulo').attr('data-id');
+	let datos = new FormData()
+	datos.append('pedir', 'crear')
+	datos.append('idFicha', queFicha)
+	datos.append('comentario', $('#txtComentarioNew').val().replaceAll("\n", "<br>") )
+	datos.append('idAsesor', '<?= $_COOKIE['ckidUsuario']; ?>')
+	fetch('api/Comentarios.php', {
+		method:'POST', body:datos
+	}).then((resp)=> resp.json() )
+	.then(respuesta =>{
+		if(respuesta.id){
+			listarComentarios(queFicha)
+			alertify.message('Creado exitosamente')
+			$('#txtComentarioNew').val('')
+		}else alertify.error('Hubo un error al realizar la operación')
+	})
+}
+
+function listarComentarios(idFicha){
+	$('#comentarios').html('')
+	let datos = new FormData()
+	datos.append('pedir', 'listar')
+	datos.append('idFicha', idFicha)
+	fetch('api/Comentarios.php', {
+		method:'POST', body:datos
+	})
+	.then(resp => resp.json() )
+	.then(respuesta => {
+		console.log(respuesta)
+		
+		if(respuesta.length==0) $('#comentarios').append(`<p>No existe ningún comentario</p>`)
+		else{
+			$('#comentarios').html('<ul class="list-group"></ul>')
+			respuesta.forEach(data=>{
+				$('#comentarios ul').append(`<li class="list-group-item d-flex justify-content-between align-items-center">
+					<div>
+						<p class="mb-0">${data.comentario}</p>
+						<small>Por: ${data.aseNombre} - ${moment(data.fecha).format('hh:mm a DD/MM/YYYY')}</small>
+					</div>
+					<button class="btn btn-outline-danger btn-sm rounded-pill" onclick="eliminarComentario(${data.id})"><i class="icofont-close"></i></button>
+				</li>`)
+			})}
+
+	})
+}
+
+</script>
+<style>
+	img{max-width: 100vh;}
+
+	.divCinta{ height: 5px; background-color: #C59641; }
+
+	p{margin-bottom: .4rem;}
+
+	.divFoto, .divSello{ width: 40%; height: 130px; margin: 0 auto; border: 2px solid #C59641!important;  }
+
+	.divSello{height: 250px; width: 100%;}
+
+	@media print{
+
+		img{max-width: 70vh;}
+
+		.divCinta{ height: 7px!important; background-color: #C59641!important; -webkit-print-color-adjust: exact; }
+		#fondoNegro{background: #1f191b!important; color:white!important; -webkit-print-color-adjust: exact; }
+	}
+
+	#h3Titulo, #h4Vino{color: #B12E1B;}
+			
+	a{color: #c79121;}
+
+	a:hover{color: #a5730d;}
+
+			#pPrecio{ border: 6px solid #B12E1B!important; color: #B12E1B; font-weight: 700; font-size: 1.8rem!important; }
+
+	.col-7 { max-width: 54.5%; }
+
+	.col-6 { max-width: 49%; }
+
+	.col-4 { max-width: 32%; }
+
+	.col-8 { max-width: 67%; }
+
+	.col-5 { max-width: 44%; flex: 0 0 44%!important; }
+	/*#row1 p, #divContenido {font-size: 1.1rem;}
+	*/
+	#divAsesor p{  margin-bottom: 0.1rem; }
+	#fotoEmpleado{ max-height: 99%;
+			margin-top: 1px;
+			padding-bottom: 1px;}
+
+	#containerPadre, .border-abregu{
+		border: 4px solid #C59641!important;
+	}
+	#colLogo{ width: 50%;}
+	#fondoNegro{background: #1f191b; color:white;}
+	#spanCorreo{ font-size: 0.7rem; }
+	.spanEliminar:hover{cursor:pointer}
+	#txtBuscador::placeholder{font-family: 'Icofont', -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"}
+	#divCodigoF{position: absolute;
+			bottom: 0;
+			right: 0;}
+	.ajs-message.ajs-error{background: rgb(229 1 1 / 95%)!important; color:white;}
+	.alertify-notifier .ajs-message.ajs-visible{background-color: #55c500;
+    color: #0a4400;}
+</style>
 </body>
 
 </html>

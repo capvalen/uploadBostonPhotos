@@ -10,75 +10,16 @@ if( isset($_COOKIE['ckPower'])){
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Boston Abregú Realty - BIENES RAICES</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link rel="stylesheet" href="css/icofont.min.css">
-	<link rel="icon" type="image/vnd.microsoft.icon" href="images/favicon.ico">
-
+  <?php include "headers.php"; ?>
 </head>
 <body class=" mb-5">
-<style>
-  img{max-width: 100vh;}
-.form-row{ margin-top:20px;}
-.form-row label{ font-weight:700; }
-.fixed-top{top: 50px;}
-#overlay {
-    position: fixed; /* Sit on top of the page content */
-    display: none; /* Hidden by default */
-    width: 100%; /* Full width (cover the whole page) */
-    height: 100%; /* Full height (cover the whole page) */
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.75); /* Black background with opacity */
-    z-index: 1051; /* Specify a stack order in case you're using a different order for other elements */
-   /* Add a pointer on hover */
-}
-#overlay .text{position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 18px;
-    color: white;
-    user-select: none;
-    transform: translate(-50%,-50%);
-}
-#hojita{font-size: 36px; display: inline; animation: cargaData 6s ease infinite;}
-#pFrase{ display: inline; }
-#pFrase span{ font-size: 13px;}
-@keyframes cargaData {
-    0%  {color: #96f368;}
-    25%  {color: #f3dd68;}
-    50% {color: #f54239;}
-    75% {color: #c173ce;}
-    100% {color: #33dbdb;}
-}
-</style>
-<!-- As a heading -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <span class="navbar-brand mb-0 h1">Boston Abregú Realty</span>
-  <div class="collapse navbar-collapse">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item ">
-        <a class="nav-link" href="ficha.php">Fichas </a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="subida.php">Nueva ficha</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="asesor.php">Nuevo asesor</a>
-      </li>
-    </ul>
-  </div>
-</nav>
+	<?php include "nav.php"; ?>
 
-  <div class="row container">
+  <div class="row ">
     <div class="col text-center">
-      <img src="images/logo.png?v=1.0.1" class="">
+			<img src="images/logo.png" class=" img-fluid mx-auto mt-2">
       <p><strong>Bienes Raices</strong></p>
+			<h3 class="my-3">Nuevo asesor</h3>
     </div>
   </div>
   <div class="container">
@@ -299,5 +240,42 @@ $('#formUploadImage').submit(function () {
     }
 });
 </script>
+<style>
+  img{max-width: 100vh;}
+	.form-row{ margin-top:20px;}
+	.form-row label{ font-weight:700; }
+	.fixed-top{top: 50px;}
+	#overlay {
+			position: fixed; /* Sit on top of the page content */
+			display: none; /* Hidden by default */
+			width: 100%; /* Full width (cover the whole page) */
+			height: 100%; /* Full height (cover the whole page) */
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(0,0,0,0.75); /* Black background with opacity */
+			z-index: 1051; /* Specify a stack order in case you're using a different order for other elements */
+		/* Add a pointer on hover */
+	}
+	#overlay .text{position: absolute;
+			top: 50%;
+			left: 50%;
+			font-size: 18px;
+			color: white;
+			user-select: none;
+			transform: translate(-50%,-50%);
+	}
+	#hojita{font-size: 36px; display: inline; animation: cargaData 6s ease infinite;}
+	#pFrase{ display: inline; }
+	#pFrase span{ font-size: 13px;}
+	@keyframes cargaData {
+			0%  {color: #96f368;}
+			25%  {color: #f3dd68;}
+			50% {color: #f54239;}
+			75% {color: #c173ce;}
+			100% {color: #33dbdb;}
+	}
+</style>
 </body>
 </html>

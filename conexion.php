@@ -14,4 +14,16 @@ $conection->set_charset("utf8");
 $cadena= new mysqli($server, $username, $password, $db);
 $cadena->set_charset("utf8");
 
+//Con Objetos:
+try {
+	$dbase = new PDO (
+		'mysql:host=localhost;
+		dbname='.$datos,
+		$username,
+		$password,
+		array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
+	);
+} catch (Exception $e) {
+	echo "Problema con la conexion: ".$e->getMessage();
+}
 ?>
