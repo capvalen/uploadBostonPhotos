@@ -13,7 +13,7 @@ session_cache_limiter('none');
 <!-- As a heading -->
 <?php require "nav.php"; ?>
 
-<div class="container-fluid pt-0 px-0" id="containerPadre">
+<div class="container-fluid pt-0 px-0 pt-2" id="containerPadre">
 
 
 
@@ -353,11 +353,8 @@ session_cache_limiter('none');
 </div>
 <?php endif; ?>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script> <!-- extraido de https://jquery-form.github.io/form/ -->
-<script src="js/alertify.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
+<?php include "footers.php"?>
+
 
 
 <script type="text/javascript">

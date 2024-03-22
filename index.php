@@ -34,7 +34,7 @@
 				</div>
 				<div id="divError"><span id="spanError2"></span></div>
 				<div class="text-center text-muted mt-2">
-					<small >Versión 1.26 Build 24.0321</small>
+					<small >Versión 1.27 Build 24.0321</small>
 				</div>
 			</div>
 		</div> 

@@ -5,9 +5,7 @@ switch ($_POST['pedir']) {
 	case 'listar': listar($dbase); break;
 	case 'crear': crear($dbase); break;
 	case 'eliminar': eliminar($dbase); break;
-	default:
-		# code...
-		break;
+	default: break;
 }
 
 function listar($db){

@@ -13,16 +13,8 @@ if( isset($_COOKIE['ckPower'])){
   <?php include "headers.php"; ?>
 </head>
 <body class=" mb-5">
-	<?php include "nav.php"; ?>
-
-  <div class="row ">
-    <div class="col text-center">
-			<img src="images/logo.png" class=" img-fluid mx-auto mt-2">
-      <p><strong>Bienes Raices</strong></p>
-			<h3 class="my-3">Nuevo asesor</h3>
-    </div>
-  </div>
-  <div class="container">
+	<?php include "nav.php"; ?>  
+  <div class="container mt-2">
 	<form id="formUploadImage" action="upload.php" method="post">
   <div class="card ">
     <div class="card-body">
@@ -185,11 +177,7 @@ if( isset($_COOKIE['ckPower'])){
     
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script> <!-- extraido de https://jquery-form.github.io/form/ -->
-
+<?php include "footers.php" ?>
 <script>
 function pantallaOver(tipo) {
 	if(tipo){$('#overlay').css('display', 'initial');}
