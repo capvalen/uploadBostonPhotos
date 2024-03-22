@@ -15,6 +15,9 @@
 			<li class="nav-item">
 				<a class="nav-link <?= $pagina == 'drive.php' ? 'active':''?>" href="drive.php">Drive</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link <?= $pagina == 'carta-presentacion.php' ? 'active':''?>" href="carta-presentacion.php">Carta de presentación</a>
+			</li>
 
 			<?php if($_COOKIE['ckPower']=="1"): ?>
 

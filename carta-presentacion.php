@@ -15,15 +15,15 @@ if( isset($_COOKIE['ckPower'])){
 </head>
 <body>
 <div class="container mb-5" id="app">
-	<h3 class="text-center my-3">Documentos importantes</h3>
+	<h3 class="text-center my-3">Carta de presentación</h3>
 	<div class="row mb-2">
 		<div class="col">
-			<button class="btn btn-outline-primary" data-toggle="modal" data-target="#modalCrear"><i class="icofont-plus"></i> Adjuntar nuevo documento</button>
+			<!-- <button class="btn btn-outline-primary" data-toggle="modal" data-target="#modalCrear"><i class="icofont-plus"></i> Nueva carta</button> -->
 		</div>
 	</div>
 	<div class="card">
 		<div class="card-body">
-			<p><strong>Documentos adjuntados</strong></p>
+			<p><strong>Cartas de presentación</strong></p>
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -42,11 +42,11 @@ if( isset($_COOKIE['ckPower'])){
 						<td>{{archivo.nombre}}</td>
 						<td>{{archivo.comentario}}</td>
 						<td>
-							<a class="btn btn-sm btn-outline-primary" :href="'https://bostonabregurealty.com/intranet/multimedia/'+archivo.ruta" :download="archivo.nombre"><i class="icofont-download"></i></a>
+							<!-- <a class="btn btn-sm btn-outline-primary" :href="'https://bostonabregurealty.com/intranet/multimedia/'+archivo.ruta" :download="archivo.nombre"><i class="icofont-download"></i></a> -->
 						</td>
 						<td>
 							<?php if($_COOKIE['ckPower']=='1') :?>
-								<button class="btn btn-sm btn-outline-danger" @click="eliminar(index,archivo.id)"><i class="icofont-trash"></i></button>
+								<!-- <button class="btn btn-sm btn-outline-danger" @click="eliminar(index,archivo.id)"><i class="icofont-trash"></i></button> -->
 							<?php endif; ?>
 						</td>
 					</tr>
@@ -110,7 +110,7 @@ if( isset($_COOKIE['ckPower'])){
 				const serv = await fetch('api/Archivos.php',{
 					method:'POST', body:datos
 				})
-				registros.value = await serv.json()
+				//registros.value = await serv.json()
 			}
 			function fechaLatam(fecha){
 				return moment(fecha).format('DD/MM/YYYY')

@@ -10,7 +10,7 @@ switch ($_POST['pedir']) {
 
 function listar($db){
 	$filas = [];
-	$sql=$db->prepare("SELECT * from archivos where activo = 1");
+	$sql=$db->prepare("SELECT * from archivos where activo = 1 order by nombre asc");
 	if($sql->execute())
 		while($row = $sql->fetch(PDO::FETCH_ASSOC))
 			$filas[] = $row;
