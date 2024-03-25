@@ -13,7 +13,7 @@
 
 			</li>
 			<li class="nav-item">
-				<a class="nav-link <?= $pagina == 'drive.php' ? 'active':''?>" href="drive.php">Drive</a>
+				<a class="nav-link <?= $pagina == 'documentos.php' ? 'active':''?>" href="documentos.php">Documentos</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link <?= $pagina == 'carta-presentacion.php' ? 'active':''?>" href="carta-presentacion.php">Carta de presentación</a>
