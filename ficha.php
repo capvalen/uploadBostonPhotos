@@ -13,21 +13,17 @@ session_cache_limiter('none');
 <!-- As a heading -->
 <?php require "nav.php"; ?>
 
-<div class="container-fluid pt-0 px-0 pt-2" id="containerPadre">
-
-
-
+<div class="container">
 	<div class="row">
-
-		<div class="col text-center">
-
-			<div id="colLogo" style="margin: 0 auto;"><img src="images/logo.png?v=1.0.3" class="img-fluid" style="padding-top:2px" ></div>
-
-			<p class="p-0 m-0"><strong>BIENES RAICES</strong></p>
+		<div class="col">
+		<div class="mx-auto"><img src="images/logo.png?v=1.0.3" class="img-fluid" style="padding-top:2px" ></div>
+		<p class="p-0 m-0 text-center"><strong>BIENES RAICES</strong></p>
 
 		</div>
-
 	</div>
+</div>
+<div class="container-fluid pt-0 px-0 pt-2" id="containerPadre">
+
 
 <?php if(!isset($_GET['cursor'])){ ?>
 
@@ -47,37 +43,34 @@ session_cache_limiter('none');
 
 				<p>Listado de propiedades:</p>
 
-				<table class="table table-hover">
-
-					<thead>
-						<tr>
-								<th>N°</th> <th>Cod.</th> <th>Título de inmueble</th><th>Precio</th> <th>@</th>
-						</tr>
-					</thead>
-
-						<?php $sqlInmueble="SELECT `idFicha`, lower(`fichTitulo`) as fichTitulo, `fichPrecio` FROM `fichas` WHERE `fichActivo`=1 order by trim(fichTitulo) asc; "; 
-
-						$resultadoInmueble=$cadena->query($sqlInmueble); $i=1; ?>
-					<tbody id="tbodyBienes">
-						<?php while($rowInmueble=$resultadoInmueble->fetch_assoc()){ ?>
-						<tr>
-
-							<th><?= $i;?></th>
-							<td class="tdCode"><a href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= "BR-".str_pad($rowInmueble['idFicha'], 4, 0, STR_PAD_LEFT); ?></a></td>
-
-							<td class="tdTitulo"><a class="text-decoration-none text-capitalize" href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= $rowInmueble['fichTitulo']; ?></a></td>
-							<td class="tdPrecio"><?= $rowInmueble['fichPrecio']; ?></td>
-							<td>
-								<button class="btn btn-outline-primary btn-sm" title="Comentarios" onclick="abrirModalComentarios(<?= $rowInmueble['idFicha']; ?>, '<?= $rowInmueble['fichTitulo']?>')"><i class="icofont-chat"></i></button>
-								<?php if($_COOKIE['ckPower']==1): ?>
-									<button class="btn button btn-outline-success btn-sm" title="Nuevo precio" onclick="cambiarPrecio(<?= $rowInmueble['idFicha']; ?>, '<?= $rowInmueble['fichPrecio']; ?>');" ><i class="icofont-edit"></i></button>
-									<button class="btn button btn-outline-danger btn-sm" title="Eliminar" onclick="borrarFicha(<?= $rowInmueble['idFicha']; ?>);" ><i class="icofont-trash"></i></button>
-								<?php endif; ?>
-							</td>
-						</tr>
-						<?php $i++; } ?>
-						</tbody>
-				</table>
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+									<th>N°</th> <th>Cod.</th> <th>Título de inmueble</th><th>Precio</th> <th>@</th>
+							</tr>
+						</thead>
+							<?php $sqlInmueble="SELECT `idFicha`, lower(`fichTitulo`) as fichTitulo, `fichPrecio` FROM `fichas` WHERE `fichActivo`=1 order by trim(fichTitulo) asc; ";
+							$resultadoInmueble=$cadena->query($sqlInmueble); $i=1; ?>
+						<tbody id="tbodyBienes">
+							<?php while($rowInmueble=$resultadoInmueble->fetch_assoc()){ ?>
+							<tr>
+								<th><?= $i;?></th>
+								<td class="tdCode"><a href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= "BR-".str_pad($rowInmueble['idFicha'], 4, 0, STR_PAD_LEFT); ?></a></td>
+								<td class="tdTitulo"><a class="text-decoration-none text-capitalize" href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= $rowInmueble['fichTitulo']; ?></a></td>
+								<td class="tdPrecio"><?= $rowInmueble['fichPrecio']; ?></td>
+								<td style="white-space: nowrap;">
+									<button class="btn btn-outline-primary btn-sm" title="Comentarios" onclick="abrirModalComentarios(<?= $rowInmueble['idFicha']; ?>, '<?= $rowInmueble['fichTitulo']?>')"><i class="icofont-chat"></i></button>
+									<?php if($_COOKIE['ckPower']==1): ?>
+										<button class="btn button btn-outline-success btn-sm" title="Nuevo precio" onclick="cambiarPrecio(<?= $rowInmueble['idFicha']; ?>, '<?= $rowInmueble['fichPrecio']; ?>');" ><i class="icofont-edit"></i></button>
+										<button class="btn button btn-outline-danger btn-sm" title="Eliminar" onclick="borrarFicha(<?= $rowInmueble['idFicha']; ?>);" ><i class="icofont-trash"></i></button>
+									<?php endif; ?>
+								</td>
+							</tr>
+							<?php $i++; } ?>
+							</tbody>
+					</table>
+				</div>
 				<p class="d-none" id="pNoHay">No hay coincidencias</p>
 		</div>
 </div>
@@ -626,7 +619,7 @@ function listarComentarios(idFicha){
 	#containerPadre, .border-abregu{
 		border: 4px solid #C59641!important;
 	}
-	#colLogo{ width: 50%;}
+	/* #colLogo{ width: 50%;} */
 	#fondoNegro{background: #1f191b; color:white;}
 	#spanCorreo{ font-size: 0.7rem; }
 	.spanEliminar:hover{cursor:pointer}
