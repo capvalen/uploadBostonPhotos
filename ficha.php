@@ -235,7 +235,7 @@ session_cache_limiter('none');
 					<img src="images/qr.png" width="230" height="230" class="img-fluid">
 
 				</div> -->
-				<img src="images/firma.png?v=1" class="img-fluid">
+				<img src="images/firma.jpg?v=1" class="img-fluid">
 
 			</div>
 

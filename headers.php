@@ -5,5 +5,5 @@
 <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed:400,700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/vnd.microsoft.icon" href="images/favicon.ico">
 <link rel="stylesheet" href="css/icofont.min.css">
-<link rel="stylesheet" href="css/alertify.min.css"/>
+<link rel="stylesheet" href="css/alertify.min.css?v=1.13"/>
 <title>Boston Abregú Realty - BIENES RAICES</title>
