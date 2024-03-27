@@ -3,7 +3,11 @@
 
 	<span class="navbar-brand mb-0 h1">Boston Abregú Realty</span>
 
-	<div class="collapse navbar-collapse">
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navBarToogler" aria-controls="navBarToogler" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+	<div class="collapse navbar-collapse" id="navBarToogler">
 
 		<ul class="navbar-nav mr-auto">
 

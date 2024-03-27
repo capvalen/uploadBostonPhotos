@@ -15,7 +15,7 @@ session_cache_limiter('none');
 
 <div class="container">
 	<div class="row">
-		<div class="col">
+		<div class="col d-flex flex-column justify-content-center">
 		<div class="mx-auto"><img src="images/logo.png?v=1.0.3" class="img-fluid" style="padding-top:2px" ></div>
 		<p class="p-0 m-0 text-center"><strong>BIENES RAICES</strong></p>
 
