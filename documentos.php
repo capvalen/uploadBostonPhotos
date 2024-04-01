@@ -77,6 +77,11 @@ if( isset($_COOKIE['ckPower'])){
 					<input type="text" class="form-control" v-model="archivo.nombre">
 					<label for="">Comentario extra</label>
 					<textarea class="form-control" rows="2" v-model="archivo.comentario"></textarea>
+					<label for="">Visibilidad</label>
+					<select class="form-control" id="sltVisible" v-model="archivo.publico">
+						<option value="1">Para todos</option>
+						<option value="0">Sólo administradores</option>
+					</select>
 					<button class="btn btn-outline-primary mt-2" @click="subirArchivo()"><i class="icofont-upload-alt"></i> Subir archivo</button>
 				</div>
 			</div>
@@ -93,7 +98,7 @@ if( isset($_COOKIE['ckPower'])){
 			let contador = ref(0)
 			const numeros =ref([0,1,2])
 			let registros = ref([])
-			let archivo = ref({id:-1, nombre:'', ruta:'', comentario:''}), multimedia = ref(null)
+			let archivo = ref({id:-1, nombre:'', ruta:'', comentario:'', publico:1}), multimedia = ref(null)
 			const queArchivo = computed(()=>{
 				if(archivo.value.nombre=='') return 'Escoger el archivo'
 				else return archivo.value.nombre
@@ -107,6 +112,7 @@ if( isset($_COOKIE['ckPower'])){
 			async function pedirDatos(){
 				let datos = new FormData();
 				datos.append('pedir', 'listar')
+				datos.append('nivel', <?= $_COOKIE['ckPower']; ?>)
 				const serv = await fetch('api/Archivos.php',{
 					method:'POST', body:datos
 				})
@@ -133,7 +139,6 @@ if( isset($_COOKIE['ckPower'])){
 							document.querySelector('#modalCrear .close').click()
 							pedirDatos()
 						}
-							
 					}).catch(function(ero){
 						console.log( 'err2' + ero );
 					})

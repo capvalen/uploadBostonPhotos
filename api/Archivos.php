@@ -10,7 +10,10 @@ switch ($_POST['pedir']) {
 
 function listar($db){
 	$filas = [];
-	$sql=$db->prepare("SELECT * from archivos where activo = 1 order by nombre asc");
+	if($_POST['nivel'] == '1')
+		$sql=$db->prepare("SELECT * from archivos where activo = 1 order by nombre asc");
+	else if($_POST['nivel'] == '2')
+		$sql=$db->prepare("SELECT * from archivos where activo = 1 and publico = 1 order by nombre asc");
 	if($sql->execute())
 		while($row = $sql->fetch(PDO::FETCH_ASSOC))
 			$filas[] = $row;
@@ -29,9 +32,9 @@ function subir($db){
 	$archivoFinal = $directorio . $queArchivo; //basename($_FILES["archivo"]["name"]);
 
 	if (move_uploaded_file($_FILES["multimedia"]["tmp_name"], $archivoFinal)) {
-		$sql = $db->prepare("INSERT INTO `archivos`(`nombre`, `ruta`, `comentario`) VALUES (?, ?, ?)");
+		$sql = $db->prepare("INSERT INTO `archivos`(`nombre`, `ruta`, `comentario`, `publico`) VALUES (?, ?, ?, ?)");
 		$serv = $sql->execute([
-			$meta['nombre'], $queArchivo, $meta['comentario']
+			$meta['nombre'], $queArchivo, $meta['comentario'], $meta['publico']
 		]);
 		if($serv){
 			echo json_encode(array( 'ruta' => $queArchivo ));
