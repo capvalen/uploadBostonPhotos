@@ -90,8 +90,7 @@ session_cache_limiter('none');
 	<div class="row mt-2 divCinta"></div>
 
 	<div class="p-2" id="fondoNegro">
-		<h4 class="text-center m-0"><strong>AHORA ES MÁS FÁCIL  EN HUANCAYO<br>  
-		VENDER,  COMPRAR  Y  ALQUILAR  SU  PROPIEDAD  CON  GARANTÍA</strong></h4>
+		<h4 class="text-center m-0"><strong>AHORA ES MÁS FÁCIL EN HUANCAYO, OXAPAMPA Y SELVA CENTRAL<br> COMPRAR, VENDER Y ALQUILAR TU PROPIEDAD CON GARANTÍA</strong></h4>
 	</div>
 
 	
