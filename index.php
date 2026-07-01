@@ -34,7 +34,7 @@
 				</div>
 				<div id="divError"><span id="spanError2"></span></div>
 				<div class="text-center text-muted mt-2">
-					<small >Versión 1.32 Build 24.0401</small>
+					<small >Versión 1.34 Build 26.0701</small>
 				</div>
 			</div>
 		</div> 
@@ -59,7 +59,7 @@ $('#txtlocalLog').keyup(function (e) {
 $('#btnAcceder').click(function() {
 	$.ajax({
 		type:'POST',
-		url: 'validarSesion.php',
+		url: 'api/validarSesion.php',
 		data: {user: $('#txtNegocioLog').val(), pws: $('#txtlocalLog').val()},
 		success: function(resp) { console.log( "respuesta " + resp);
 			//if (parseInt(iduser)>0){//console.log('el id es '+data)

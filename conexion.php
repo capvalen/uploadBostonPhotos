@@ -2,7 +2,7 @@
 $server="localhost";
 
 $username="root";
-$password="";
+$password="*123456*";
 $db='bostonabregu'; 
 
 global $cadena;
@@ -18,7 +18,7 @@ $cadena->set_charset("utf8");
 try {
 	$dbase = new PDO (
 		'mysql:host=localhost;
-		dbname='.$datos,
+		dbname='.$db,
 		$username,
 		$password,
 		array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")

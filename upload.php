@@ -1,40 +1,35 @@
 <?php
-
+global $cadena;
 include "conexion.php";
 
-$sql = "INSERT INTO `fichas`(`idFicha`, `fichTitulo`, `fichPrecio`, `fichDireccion`, `fichTipoPropiedad`, `fichAreaTerreno`, `fichAreaConstruccion`, `fichFrontis`, `fichDormitorios`, `fichBanios`, `fichCochera`, `fichDescipcion`, `idAsesor`) VALUES
-(null, '{$_POST['txtTitulo']}', '{$_POST['txtPrecio']}', '{$_POST['txtDireccion']}', '{$_POST['txtPropiedad']}', '{$_POST['txtATerreno']}', '{$_POST['txtAConstruccion']}', '{$_POST['txtFrontis']}', '{$_POST['txtDormitorios']}', '{$_POST['txtBanio']}', '{$_POST['txtCochera']}', '{$_POST['txtDescripcion']}', {$_POST['txtAsesor']});";
+$moneda = $_POST['txtMoneda'] == 'dólares' ? 'dólares' : 'soles';
+$sql = "INSERT INTO `fichas`(`idFicha`, `fichTitulo`, `fichPrecio`, `fichDireccion`, `fichTipoPropiedad`, `fichAreaTerreno`, `fichAreaConstruccion`, `fichFrontis`, `fichDormitorios`, `fichBanios`, `medios_banios`, `fichCochera`, `fichDescipcion`, `antiguedad`, `idAsesor`, `moneda`) VALUES
+(null, '{$_POST['txtTitulo']}', '{$_POST['txtPrecio']}', '{$_POST['txtDireccion']}', '{$_POST['txtPropiedad']}', '{$_POST['txtATerreno']}', '{$_POST['txtAConstruccion']}', '{$_POST['txtFrontis']}', '{$_POST['txtDormitorios']}', '{$_POST['txtBanio']}', '{$_POST['txtMediosBanios']}', '{$_POST['txtCochera']}', '{$_POST['txtDescripcion']}', '{$_POST['txtAntiguedad']}', {$_POST['txtAsesor']}, '{$moneda}');";
 
 $resultado=$cadena->query($sql);
 
 $codigo= $cadena->insert_id;
 
-if(!empty($_FILES)){
- if(is_uploaded_file($_FILES['txtFoto1']['tmp_name'])){
-  //sleep(1);
-  $source_path = $_FILES['txtFoto1']['tmp_name'];
-  $target_path = 'images/inmuebles/' . $codigo.'_foto1.'.end(explode(".", $_FILES['txtFoto1']['name']));;
-  if(move_uploaded_file($source_path, $target_path)){
-   //echo '<img src="'.$target_path.'" class="img-thumbnail" width="300" height="250" />';
+$fotos = array();
+
+if(!empty($_FILES['txtFoto']) && is_array($_FILES['txtFoto']['tmp_name'])){
+  foreach($_FILES['txtFoto']['tmp_name'] as $i => $tmpName){
+    if(is_uploaded_file($tmpName) && $_FILES['txtFoto']['error'][$i] === UPLOAD_ERR_OK){
+      $ext = pathinfo($_FILES['txtFoto']['name'][$i], PATHINFO_EXTENSION);
+      $fotoName = $codigo . '_foto' . $i . '.' . $ext;
+      $target_path = 'images/inmuebles/' . $fotoName;
+      if(move_uploaded_file($tmpName, $target_path)){
+        $fotos[] = $fotoName;
+      }
+    }
   }
- }
-  if(is_uploaded_file($_FILES['txtFoto2']['tmp_name'])){
-  //sleep(1);
-  $source_path = $_FILES['txtFoto2']['tmp_name'];
-  $target_path = 'images/inmuebles/' . $codigo.'_foto2.'.end(explode(".", $_FILES['txtFoto2']['name']));;
-  if(move_uploaded_file($source_path, $target_path)){
-   //echo '<img src="'.$target_path.'" class="img-thumbnail" width="300" height="250" />';
-  }
- }
-  if(is_uploaded_file($_FILES['txtFoto3']['tmp_name'])){
-  //sleep(1);
-  $source_path = $_FILES['txtFoto3']['tmp_name'];
-  $target_path = 'images/inmuebles/' . $codigo.'_foto3.'.end(explode(".", $_FILES['txtFoto3']['name']));;
-  if(move_uploaded_file($source_path, $target_path)){
-   //echo '<img src="'.$target_path.'" class="img-thumbnail" width="300" height="250" />';
-  }
- }
-echo $codigo;
+}
+
+if(!empty($fotos)){
+  $fotosJson = $cadena->real_escape_string(json_encode($fotos));
+  $updateSql = "UPDATE `fichas` SET `fotos` = '{$fotosJson}' WHERE `idFicha` = {$codigo}";
+  $cadena->query($updateSql);
+  echo $codigo;
 }else{
   echo "vacio";
 }

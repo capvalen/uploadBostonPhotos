@@ -10,7 +10,7 @@ $local='/';
 $expira=time()+60*60*3; //cookie para 3 horas
 
 
-if( $_POST['user'] == 'administrador' && $_POST['pws']=="boston2019" ){
+if( $_POST['user'] == 'Boston25' && $_POST['pws']=="Realty25" ){
     setcookie('ckAtiende', 'Administrador', $expira, $local);
 	setcookie('cknomCompleto', 'Administrador', $expira, $local);
 	setcookie('ckPower', 1, $expira, $local);
@@ -18,7 +18,7 @@ if( $_POST['user'] == 'administrador' && $_POST['pws']=="boston2019" ){
 	echo 'concedido';
 }
 
-else if( $_POST['user'] == 'boston' && $_POST['pws']=="abregu" ){
+else if( $_POST['user'] == 'Realty' && $_POST['pws']=="Boston2014" ){
     setcookie('ckAtiende', 'Asesor', $expira, $local);
 	setcookie('cknomCompleto', 'Asesor', $expira, $local);
 	setcookie('ckPower', 2, $expira, $local);

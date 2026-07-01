@@ -18,7 +18,7 @@ if( isset($_COOKIE['ckPower'])){
 	<h3 class="text-center my-3">Documentos importantes</h3>
 	<div class="row mb-2">
 		<div class="col">
-			<button class="btn btn-outline-primary" data-toggle="modal" data-target="#modalCrear"><i class="icofont-plus"></i> Adjuntar nuevo documento</button>
+			<button class="btn btn-outline-primary" data-toggle="modal" data-target="#modalCrear"><i class="bi-plus"></i> Adjuntar nuevo documento</button>
 		</div>
 	</div>
 	<div class="card">
@@ -42,11 +42,11 @@ if( isset($_COOKIE['ckPower'])){
 						<td>{{archivo.nombre}}</td>
 						<td>{{archivo.comentario}}</td>
 						<td>
-							<a class="btn btn-sm btn-outline-primary" :href="'https://bostonabregurealty.com/intranet/multimedia/'+archivo.ruta" :download="archivo.nombre"><i class="icofont-download"></i></a>
+							<a class="btn btn-sm btn-outline-primary" :href="'https://bostonabregurealty.com/intranet/multimedia/'+archivo.ruta" :download="archivo.nombre"><i class="bi-download"></i></a>
 						</td>
 						<td>
 							<?php if($_COOKIE['ckPower']=='1') :?>
-								<button class="btn btn-sm btn-outline-danger" @click="eliminar(index,archivo.id)"><i class="icofont-trash"></i></button>
+								<button class="btn btn-sm btn-outline-danger" @click="eliminar(index,archivo.id)"><i class="bi-trash"></i></button>
 							<?php endif; ?>
 						</td>
 					</tr>
@@ -82,7 +82,7 @@ if( isset($_COOKIE['ckPower'])){
 						<option value="1">Para todos</option>
 						<option value="0">Sólo administradores</option>
 					</select>
-					<button class="btn btn-outline-primary mt-2" @click="subirArchivo()"><i class="icofont-upload-alt"></i> Subir archivo</button>
+					<button class="btn btn-outline-primary mt-2" @click="subirArchivo()"><i class="bi-upload"></i> Subir archivo</button>
 				</div>
 			</div>
 		</div>
