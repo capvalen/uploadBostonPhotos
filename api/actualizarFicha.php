@@ -86,6 +86,26 @@ if (!empty($_FILES['txtFoto']) && is_array($_FILES['txtFoto']['tmp_name'])) {
 }
 
 // 3. Actualizar columna fotos en BD
+// Aplicar reorden si el usuario movió las fotos
+if (isset($_POST['ordenFotos'])) {
+    $orden = json_decode($_POST['ordenFotos'], true);
+    if (is_array($orden) && count($orden) > 0) {
+        $fotosReordenadas = array();
+        // Primero las existentes en el nuevo orden
+        foreach ($orden as $f) {
+            if (in_array($f, $fotosGuardadas)) {
+                $fotosReordenadas[] = $f;
+            }
+        }
+        // Luego las nuevas fotos que no estaban en el orden
+        foreach ($fotosGuardadas as $f) {
+            if (!in_array($f, $fotosReordenadas)) {
+                $fotosReordenadas[] = $f;
+            }
+        }
+        $fotosGuardadas = $fotosReordenadas;
+    }
+}
 $fotosJson = $cadena->real_escape_string(json_encode($fotosGuardadas));
 $cadena->query("UPDATE `fichas` SET `fotos` = '{$fotosJson}' WHERE `idFicha` = {$idFicha}");
 

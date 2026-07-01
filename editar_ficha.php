@@ -213,7 +213,9 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 						<p class="mb-1 font-weight-bold">Arrastra y suelta fotos nuevas aquí</p>
 						<p class="text-muted mb-0">o haz clic para agregar · <small>Máx. 8 en total</small></p>
 					</div>
+					<p class="text-muted small mb-2"><i class="bi bi-arrow-up-down"></i> Arrastra las fotos existentes para reordenarlas</p>
 					<div id="fotosPreview" class="row mt-3"></div>
+					<input type="hidden" name="ordenFotos" id="txtOrdenFotos">
 					<div class="d-flex justify-content-center mt-4">
 						<button type="submit" class="btn btn-outline-warning btn-lg" id="btnGuardarFicha"><i class="bi bi-arrow-clockwise"></i> Guardar cambios</button>
 					</div>
@@ -224,6 +226,9 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 
 		<div id="overlay">
 			<div class="text">
+				<div class="spinner-border text-light mb-3" role="status" style="width:3rem;height:3rem;">
+					<span class="sr-only">Cargando...</span>
+				</div><br>
 				<span id="hojita"><i class="icofont-leaf"></i></span>
 				<p id="pFrase">Guardando cambios... <span id="porcentajeSub"></span></p>
 			</div>
@@ -231,6 +236,7 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 	</div>
 
 	<?php include "footers.php" ?>
+	<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
 	<script>
 		<?php if (isset($_GET['creada'])): ?>
 		$(function() {
@@ -261,12 +267,15 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 
 		function renderPreviews() {
 			var container = $('#fotosPreview').empty();
-			var total = fotosExistentes.length + fotosNuevas.length;
+
+			if (window.sortableInstance) {
+				window.sortableInstance.destroy();
+			}
 
 			fotosExistentes.forEach(function(nombre, index) {
-				var col = $('<div class="col-md-3 col-6 mb-2"></div>');
+				var col = $('<div class="col-md-3 col-6 mb-2" data-foto="' + nombre + '"></div>');
 				var div = $('<div class="position-relative border rounded overflow-hidden" style="background:#f5f5f5;"></div>');
-				div.append('<img src="images/inmuebles/' + nombre + '?t=' + Date.now() + '" class="img-fluid" style="height:120px;width:100%;object-fit:cover">');
+				div.append('<img src="images/inmuebles/' + nombre + '?t=' + Date.now() + '" class="img-fluid" style="height:120px;width:100%;object-fit:cover;cursor:grab">');
 				div.append('<div class="position-absolute" style="top:4px;right:4px;display:flex;gap:4px;">' +
 					'<span class="badge" style="font-size:10px;padding:3px 6px;margin-right:4px;background-color:#333638;line-height:1rem;color:#fff">En línea</span>' +
 					'<button type="button" class="btn btn-danger btn-sm" style="line-height:1;padding:2px 6px;font-size:16px;border-radius:50%" onclick="eliminarExistente(' + index + ')">&times;</button>' +
@@ -275,6 +284,7 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 				container.append(col);
 			});
 
+			var nuevasCount = fotosNuevas.length;
 			fotosNuevas.forEach(function(file, index) {
 				var reader = new FileReader();
 				reader.onload = function(e) {
@@ -287,6 +297,24 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 				};
 				reader.readAsDataURL(file);
 			});
+
+			if (fotosExistentes.length > 0) {
+				window.sortableInstance = Sortable.create(document.getElementById('fotosPreview'), {
+					animation: 150,
+					handle: 'img',
+					filter: '.btn',
+					onEnd: function() {
+						var orden = [];
+						$('#fotosPreview > div[data-foto]').each(function() {
+							orden.push($(this).data('foto'));
+						});
+						if (orden.length > 0) {
+							fotosExistentes = orden;
+							$('#txtOrdenFotos').val(JSON.stringify(orden));
+						}
+					}
+				});
+			}
 		}
 
 		function eliminarExistente(index) {
@@ -351,6 +379,7 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 			}
 
 			$('#txtDescripcion').val(quill.root.innerHTML);
+			$('#txtOrdenFotos').val(JSON.stringify(fotosExistentes));
 			var formData = new FormData(this);
 			formData.set('fotosEliminar', JSON.stringify(fotosEliminar));
 			fotosNuevas.forEach(function(file) {
@@ -447,6 +476,7 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 			color: white;
 			user-select: none;
 			transform: translate(-50%, -50%);
+			text-align: center;
 		}
 
 		#hojita {

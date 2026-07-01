@@ -185,7 +185,11 @@ if (isset($_COOKIE['ckPower'])) {
 
 		</form>
 		<div id="overlay">
-			<div class="text"><span id="hojita"><i class="icofont-leaf"></i></span>
+			<div class="text">
+				<div class="spinner-border text-light mb-3" role="status" style="width:3rem;height:3rem;">
+					<span class="sr-only">Cargando...</span>
+				</div><br>
+				<span id="hojita"><i class="icofont-leaf"></i></span>
 				<p id="pFrase"> Subiendo los datos... <span id="porcentajeSub"></span> <br> <span>«Pregúntate si lo que estás haciendo hoy <br> te acerca al lugar en el que quieres estar mañana» <br> Walt Disney</span></p>
 			</div>
 		</div>
@@ -369,6 +373,7 @@ if (isset($_COOKIE['ckPower'])) {
 			color: white;
 			user-select: none;
 			transform: translate(-50%, -50%);
+			text-align: center;
 		}
 
 		#hojita {
