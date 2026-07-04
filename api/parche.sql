@@ -1,4 +1,4 @@
---1.37
+--1.4.2
 ALTER TABLE `fichas` ADD `resumen` TEXT NULL AFTER `fichTitulo`;
 ALTER TABLE `fichas` ADD `tipo_operacion` ENUM('venta', 'alquiler', 'traspaso', 'permuta') NULL DEFAULT 'venta' AFTER `moneda`;
 
