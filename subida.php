@@ -18,12 +18,31 @@ if (isset($_COOKIE['ckPower'])) {
 <body class=" mb-5">
 	<?php include "nav.php"; ?>
 	<div class="container mt-2">
-		<p class="lead-2"><strong>Información general</strong></p>
+		
 		<form id="formUploadImage" action="upload.php" method="post">
-			<div class="card ">
+			<div class="card">
 				<div class="card-body">
-
 					<p>Por favor rellene cuidadosamente los campos para que pueda colgar una ficha nueva.</p>
+				</div>
+			</div>
+
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="text-uppercase" style="color:#C59641;border-bottom:2px solid #C59641;padding-bottom:6px;"><i class="bi bi-info-circle"></i> Información general</h5>
+
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Operación</label>
+						</div>
+						<div class="col-7">
+							<select class="form-control" name="txtOperacion">
+								<option value="venta">Venta</option>
+								<option value="alquiler">Alquiler</option>
+								<option value="traspaso">Traspaso</option>
+								<option value="permuta">Permuta</option>
+							</select>
+						</div>
+					</div>
 					<div class="form-row">
 						<div class="col-3">
 							<label for="">Título de la ficha</label>
@@ -66,30 +85,6 @@ if (isset($_COOKIE['ckPower'])) {
 					</div>
 					<div class="form-row">
 						<div class="col-3">
-							<label for="">Área del terreno</label>
-						</div>
-						<div class="col-7">
-							<input type="text" class="form-control" name="txtATerreno" autocomplete="off">
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="col-3">
-							<label for="">Área de construcción</label>
-						</div>
-						<div class="col-7">
-							<input type="text" class="form-control" name="txtAConstruccion" autocomplete="off">
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="col-3">
-							<label for="">Frontis</label>
-						</div>
-						<div class="col-7">
-							<input type="text" class="form-control" name="txtFrontis" autocomplete="off">
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="col-3">
 							<label for="">Dormitorios</label>
 						</div>
 						<div class="col-7">
@@ -106,7 +101,7 @@ if (isset($_COOKIE['ckPower'])) {
 					</div>
 					<div class="form-row">
 						<div class="col-3">
-							<label for="">Medio Baños</label>
+							<label for="">Medio baños</label>
 						</div>
 						<div class="col-7">
 							<input type="text" class="form-control" name="txtMediosBanios" autocomplete="off">
@@ -122,21 +117,107 @@ if (isset($_COOKIE['ckPower'])) {
 					</div>
 					<div class="form-row">
 						<div class="col-3">
-							<label for="">Descripción</label>
-						</div>
-						<div class="col-7">
-							<input type="hidden" name="txtDescripcion" id="txtDescripcion">
-							<div id="editorDescripcion" style="min-height:200px;"></div>
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="col-3">
 							<label for="">Antigüedad</label>
 						</div>
 						<div class="col-7">
 							<input type="text" class="form-control" name="txtAntiguedad" autocomplete="off">
 						</div>
 					</div>
+				</div>
+			</div>
+
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="text-uppercase" style="color:#C59641;border-bottom:2px solid #C59641;padding-bottom:6px;"><i class="bi bi-arrows-angle-expand"></i> Superficies y medidas</h5>
+
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Terreno</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtATerreno" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Total construido</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtAConstruccion" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Superficie descubierta</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtSuperficieDescubierta" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Superficie semicubierta</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtSuperficieSemicubierta" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Superficie cubierta</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtSuperficieCubierta" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Frontis</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtFrontis" autocomplete="off">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="text-uppercase" style="color:#C59641;border-bottom:2px solid #C59641;padding-bottom:6px;"><i class="bi bi-text-paragraph"></i> Descripción</h5>
+
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Resumen</label>
+						</div>
+						<div class="col-7">
+							<textarea class="form-control" name="txtResumen" rows="4" autocomplete="off"></textarea>
+						</div>
+					</div>
+					<div class="form-row mt-4">
+						<div class="col-3">
+							<label for="">Descripción</label>
+						</div>
+						<div class="col-7">
+							<input type="hidden" name="txtDescripcion" id="txtDescripcion">
+							<div id="editorDescripcion" style="min-height:150px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="text-uppercase" style="color:#C59641;border-bottom:2px solid #C59641;padding-bottom:6px;"><i class="bi bi-star"></i> Beneficios</h5>
+
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Beneficios</label>
+						</div>
+						<div class="col-7">
+							<textarea class="form-control" name="txtBeneficios" id="txtBeneficios" rows="4" autocomplete="off"></textarea>
+						</div>
+					</div>
+
 					<div class="form-row">
 						<div class="col-3">
 							<label for="">Asesor</label>
@@ -144,7 +225,7 @@ if (isset($_COOKIE['ckPower'])) {
 						<div class="col-7">
 							<select class="form-control" name="txtAsesor">
 								<?php
-								global $cadena; //indica al liter que viene de un ámbito global
+								global $cadena;
 								$sqlAsesor = "SELECT `idAsesor`, upper(`aseNombre`) as aseNombre, `aseCelular`, `aseCorreo`, `aseActivo` FROM `asesor` WHERE aseActivo=1 order by aseNombre asc;";
 								$resultadoAsesor = $cadena->query($sqlAsesor);
 								while ($rowAsesor = $resultadoAsesor->fetch_assoc()) { ?>
@@ -170,15 +251,16 @@ if (isset($_COOKIE['ckPower'])) {
 
 			<div class="card mt-3">
 				<div class="card-body">
+					<p class="font-weight-bold">Fotografías</p>
 					<div id="dropzone" class="dropzone text-center p-4 border border-2 border-dashed rounded cursor-pointer">
 						<input type="file" id="fileInput" accept="image/*" multiple style="display:none">
 						<p class="mb-1"><i class="icofont-cloud-upload" style="font-size:42px;color:#6c757d;"></i></p>
-						<p class="mb-1 font-weight-bold">Arrastra y suelta tus fotos aquí</p>
+						<p class="mb-1 font-weight-bold"><i class="bi bi-file-earmark-arrow-up"></i> Arrastra y suelta tus fotos aquí</p>
 						<p class="text-muted mb-0">o haz clic para seleccionar · <small>Mín. 2, Máx. 8</small></p>
 					</div>
 					<div id="fotosPreview" class="row mt-3"></div>
 					<div class="d-flex justify-content-center mt-4">
-						<input type="submit" class="btn btn-outline-warning btn-lg" id="btnGuardarFicha" value="Guardar ficha">
+						<button type="submit" class="btn btn-lg" id="btnGuardarFicha" style="background:#C59641;color:#fff;border-color:#C59641;"><i class="bi bi-floppy"></i> Guardar ficha</button>
 					</div>
 				</div>
 			</div>
@@ -317,12 +399,34 @@ if (isset($_COOKIE['ckPower'])) {
 		});
 	</script>
 	<style>
+		.ql-toolbar.ql-snow,
+		.ql-container.ql-snow {
+			width: 100% !important;
+			max-width: 100% !important;
+			box-sizing: border-box;
+		}
+		.ql-toolbar.ql-snow {
+			white-space: normal !important;
+			flex-wrap: wrap;
+		}
+		.ql-editor {
+			width: 100% !important;
+			max-width: 100% !important;
+			word-wrap: break-word !important;
+			white-space: normal !important;
+		}
 		img {
 			max-width: 100vh;
 		}
 
 		.form-row {
 			margin-top: 20px;
+		}
+
+		.form-row .col-7 {
+			max-width: 58.33%;
+			flex: 0 0 58.33%;
+			overflow: hidden;
 		}
 
 		.form-row label {

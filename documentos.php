@@ -42,7 +42,7 @@ if( isset($_COOKIE['ckPower'])){
 						<td>{{archivo.nombre}}</td>
 						<td>{{archivo.comentario}}</td>
 						<td>
-							<a class="btn btn-sm btn-outline-primary" :href="'https://bostonabregurealty.com/intranet/multimedia/'+archivo.ruta" :download="archivo.nombre"><i class="bi-download"></i></a>
+							<a class="btn btn-sm btn-outline-primary" :href="'https://intranet.bostonabregurealty.com/multimedia/'+archivo.ruta" :download="archivo.nombre"><i class="bi-download"></i></a>
 						</td>
 						<td>
 							<?php if($_COOKIE['ckPower']=='1') :?>

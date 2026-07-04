@@ -3,8 +3,8 @@ global $cadena;
 include "conexion.php";
 
 $moneda = $_POST['txtMoneda'] == 'dólares' ? 'dólares' : 'soles';
-$sql = "INSERT INTO `fichas`(`idFicha`, `fichTitulo`, `fichPrecio`, `fichDireccion`, `fichTipoPropiedad`, `fichAreaTerreno`, `fichAreaConstruccion`, `fichFrontis`, `fichDormitorios`, `fichBanios`, `medios_banios`, `fichCochera`, `fichDescipcion`, `antiguedad`, `idAsesor`, `moneda`) VALUES
-(null, '{$_POST['txtTitulo']}', '{$_POST['txtPrecio']}', '{$_POST['txtDireccion']}', '{$_POST['txtPropiedad']}', '{$_POST['txtATerreno']}', '{$_POST['txtAConstruccion']}', '{$_POST['txtFrontis']}', '{$_POST['txtDormitorios']}', '{$_POST['txtBanio']}', '{$_POST['txtMediosBanios']}', '{$_POST['txtCochera']}', '{$_POST['txtDescripcion']}', '{$_POST['txtAntiguedad']}', {$_POST['txtAsesor']}, '{$moneda}');";
+$sql = "INSERT INTO `fichas`(`idFicha`, `fichTitulo`, `fichPrecio`, `fichDireccion`, `fichTipoPropiedad`, `fichAreaTerreno`, `fichAreaConstruccion`, `superficie_descubierta`, `superficie_semicubierta`, `superficie_cubierta`, `fichFrontis`, `fichDormitorios`, `fichBanios`, `medios_banios`, `fichCochera`, `fichDescipcion`, `antiguedad`, `resumen`, `beneficios`, `idAsesor`, `moneda`, `tipo_operacion`) VALUES
+(null, '{$_POST['txtTitulo']}', '{$_POST['txtPrecio']}', '{$_POST['txtDireccion']}', '{$_POST['txtPropiedad']}', '{$_POST['txtATerreno']}', '{$_POST['txtAConstruccion']}', '{$_POST['txtSuperficieDescubierta']}', '{$_POST['txtSuperficieSemicubierta']}', '{$_POST['txtSuperficieCubierta']}', '{$_POST['txtFrontis']}', '{$_POST['txtDormitorios']}', '{$_POST['txtBanio']}', '{$_POST['txtMediosBanios']}', '{$_POST['txtCochera']}', '{$_POST['txtDescripcion']}', '{$_POST['txtAntiguedad']}', '{$_POST['txtResumen']}', '{$_POST['txtBeneficios']}', {$_POST['txtAsesor']}, '{$moneda}', '{$_POST['txtOperacion']}');";
 
 $resultado=$cadena->query($sql);
 

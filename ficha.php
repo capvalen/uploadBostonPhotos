@@ -28,25 +28,26 @@ session_cache_limiter('none');
 		<?php if (!isset($_GET['cursor'])) { ?>
 
 			<div class="container">
-				<div class="row my-3 d-flex justify-content-between">
-					<?php if ($_COOKIE['ckPower'] == 1): ?>
-						<div><a href="subida.php" class="btn d-block btn-dark mb-2"><i class="bi bi-asterisk"></i> Crear ficha</a></div>
-					<?php endif; ?>
-					<div class="card ">
-						<div class="card-body">
-							<div class="form-inline">
-								<label class="" for="inlineFormInputName2"><i class="bi bi-search"></i> <span class="mx-2">Buscador:</span></label>
-								<input type="text" class="form-control mb-2 mx-2" id="txtBuscador">
-
+				<div class="row mb-2">
+					<div class="col  ">
+						<div class="card">
+							<div class="card-body">
+								<div class=" d-flex justify-content-between">
+									<?php if ($_COOKIE['ckPower'] == 1): ?>
+										<div><a href="subida.php" class="btn d-block btn-dark mb-2"><i class="bi bi-asterisk"></i> Crear ficha</a></div>
+									<?php endif; ?>
+									<div class="form-inline">
+										<label class="" for="inlineFormInputName2"><i class="bi bi-search"></i> <span class="mx-2">Buscador:</span></label>
+										<input type="text" class="form-control mb-2 mx-2" id="txtBuscador">
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="row">
-
-					<p>Listado de propiedades:</p>
-
+				<div class="row mt-4">
+					<p><strong>Listado de propiedades:</strong></p>
 					<div class="table-responsive">
 						<table class="table table-hover">
 							<thead>
@@ -55,7 +56,7 @@ session_cache_limiter('none');
 									<th>Cod.</th>
 									<th>Título de inmueble</th>
 									<th>Precio</th>
-									<th>@</th>
+									<th>Acciones</th>
 								</tr>
 							</thead>
 							<?php
@@ -68,11 +69,12 @@ session_cache_limiter('none');
 								<?php while ($rowInmueble = $resultadoInmueble->fetch_assoc()) { ?>
 									<tr>
 										<th><?= $i; ?></th>
-										<td class="tdCode"><a href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= "BR-" . str_pad($rowInmueble['idFicha'], 4, 0, STR_PAD_LEFT); ?></a></td>
-										<td class="tdTitulo"><a class="text-decoration-none text-capitalize" href="ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>"><?= $rowInmueble['fichTitulo']; ?></a></td>
-										<td class="tdPrecio"><?= ($rowInmueble['moneda'] == 'dólares' ? '$' : 'S/.' ) . ' ' . $rowInmueble['fichPrecio']; ?></td>
+										<td class="tdCode"><?= "BR-" . str_pad($rowInmueble['idFicha'], 4, 0, STR_PAD_LEFT); ?></td>
+										<td class="tdTitulo text-capitalize"><?= $rowInmueble['fichTitulo']; ?></td>
+										<td class="tdPrecio"><?= ($rowInmueble['moneda'] == 'dólares' ? '$' : 'S/.') . ' ' . $rowInmueble['fichPrecio']; ?></td>
 										<td style="white-space: nowrap;">
 											<button class="btn btn-outline-primary btn-sm" title="Comentarios" onclick="abrirModalComentarios(<?= $rowInmueble['idFicha']; ?>, '<?= $rowInmueble['fichTitulo'] ?>')"><i class="bi bi-chat-quote"></i></button>
+											<button class="btn btn-sm" style="background:transparent;color:#C59641;border-color:#C59641;" title="Ficha PDF" onclick="abrirModalAsesor(<?= $rowInmueble['idFicha']; ?>)"><i class="bi bi-file-pdf"></i></button>
 											<?php if ($_COOKIE['ckPower'] == 1): ?>
 												<a href="editar_ficha.php?cursor=<?= $rowInmueble['idFicha']; ?>" class="btn btn-outline-info btn-sm" title="Editar ficha"><i class="bi bi-pencil-square"></i></a>
 												<button class="btn button btn-outline-success btn-sm d-none" title="Nuevo precio" onclick="cambiarPrecio(<?= $rowInmueble['idFicha']; ?>, '<?= $rowInmueble['fichPrecio']; ?>');"><i class="bi bi-pencil-square"></i></button>
@@ -307,7 +309,7 @@ session_cache_limiter('none');
 						<textarea class="form-control" id="txtComentarioNew" rows="2"></textarea>
 					</div>
 					<div class="col-1 d-flex align-items-center">
-						<button class="btn btn-outline-primary" onclick="agregarComentario()"><i class="bi bi-plus"></i></button>
+						<button class="btn btn-outline-primary" onclick="agregarComentario()"><i class="bi bi-plus-lg"></i></button>
 					</div>
 				</div>
 				<p class="mt-2"><strong>Comentarios:</strong></p>
@@ -590,6 +592,49 @@ session_cache_limiter('none');
 		}
 	<?php endif; ?>
 
+	function abrirPropiedad(idFicha) {
+		var json = JSON.stringify({
+			cursor: idFicha
+		});
+		var invertido = json.split('').reverse().join('');
+		var codificado = btoa(invertido);
+		window.open('propiedad.php?p=' + codificado, '_blank');
+	}
+
+	var idFichaActual = 0;
+
+	function abrirModalAsesor(idFicha) {
+		idFichaActual = idFicha;
+		$('#selectAsesor').html('<option value="">Cargando...</option>');
+		fetch('api/asesores.php')
+			.then(res => res.json())
+			.then(data => {
+				var select = $('#selectAsesor');
+				select.empty();
+				select.append('<option value="">-- Seleccione --</option>');
+				data.forEach(function(a) {
+					select.append('<option value="' + a.idAsesor + '">' + a.aseNombre + '</option>');
+				});
+				$('#modalAsesor').modal('show');
+			});
+	}
+
+	$(document).on('click', '#btnVerFichaAsesor', function() {
+		var idAsesor = $('#selectAsesor').val();
+		if (!idAsesor) {
+			alertify.error('Seleccione un asesor');
+			return;
+		}
+		var json = JSON.stringify({
+			cursor: idFichaActual,
+			asesor: parseInt(idAsesor)
+		});
+		var invertido = json.split('').reverse().join('');
+		var codificado = btoa(invertido);
+		window.open('propiedad.php?p=' + codificado, '_blank');
+		$('#modalAsesor').modal('hide');
+	});
+
 	function abrirModalComentarios(idFicha, titulo) {
 		console.log('abrir')
 		$('#comentarios').html('')
@@ -640,9 +685,9 @@ session_cache_limiter('none');
 						$('#comentarios ul').append(`<li class="list-group-item d-flex justify-content-between align-items-center">
 					<div>
 						<p class="mb-0">${data.comentario}</p>
-						<small>Por: ${data.aseNombre} - ${moment(data.fecha).format('hh:mm a DD/MM/YYYY')}</small>
+						<small class="text-muted">Por: ${data.aseNombre} - ${moment(data.fecha).format('hh:mm a DD/MM/YYYY')}</small>
 					</div>
-					<button class="btn btn-outline-danger btn-sm rounded-pill" onclick="eliminarComentario(${data.id})"><i class="icofont-close"></i></button>
+					<button class="btn btn-outline-danger btn-sm rounded-pill" onclick="eliminarComentario(${data.id})"><i class="bi bi-x"></i></button>
 				</li>`)
 					})
 				}
@@ -701,7 +746,8 @@ session_cache_limiter('none');
 		color: #B12E1B;
 	}
 
-	a {
+	a,
+	.tdTitulo {
 		color: #c79121;
 	}
 
@@ -803,6 +849,27 @@ session_cache_limiter('none');
 		color: #0a4400;
 	}
 </style>
+
+<!-- Modal seleccionar asesor para ficha PDF -->
+<div class="modal fade" id="modalAsesor" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header border-0">
+				<h5 class="modal-title">Seleccionar asesor</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<select id="selectAsesor" class="form-control">
+					<option value="">-- Cargando --</option>
+				</select>
+			</div>
+			<div class="modal-footer border-0">
+				<button type="button" class="btn" style="background:#C59641;color:#fff;border-color:#C59641;" data-dismiss="modal" id="btnVerFichaAsesor"><i class="bi bi-file-pdf"></i> Ver ficha con asesor</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 </body>
 
 </html>

@@ -15,9 +15,10 @@ if (!$idFicha) {
 }
 
 $sql = "SELECT `idFicha`, `fichTitulo`, `fichPrecio`, `fichDireccion`, `fichTipoPropiedad`,
-  `fichAreaTerreno`, `fichAreaConstruccion`, `fichFrontis`, `fichDormitorios`,
+  `fichAreaTerreno`, `fichAreaConstruccion`, `superficie_descubierta`, `superficie_semicubierta`, `superficie_cubierta`,
+  `fichFrontis`, `fichDormitorios`,
   `fichBanios`, `medios_banios`, `fichCochera`, `fichDescipcion`, `antiguedad`,
-  `idAsesor`, `fotos`, `moneda`
+  `idAsesor`, `fotos`, `moneda`, `beneficios`, `resumen`, `tipo_operacion`
   FROM `fichas` WHERE idFicha = {$idFicha}";
 /** @var mysqli $cadena */
 $resultado = $cadena->query($sql);
@@ -40,15 +41,39 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 	<?php include "nav.php"; ?>
 	<div class="container mt-2">
 		<div class="d-flex justify-content-between align-items-center mb-2">
-			<a href="ficha.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Ver todas las fichas</a>
-			<p class="lead-2 mb-0"><strong>Editando la ficha:</strong> <span class="badge badge-secondary">BR-<?= str_pad($idFicha, 4, 0, STR_PAD_LEFT) ?></span></p>
+			<div class="d-flex align-items-center gap-2" style="gap:8px">
+				<a href="ficha.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Ver todas las fichas</a>
+			</div>
+			<div class="d-flex">
+				<p class="lead-2 mb-0"><strong>Editando la ficha:</strong> <span class="badge" style="background:#343a40;color:#fff;">BR-<?= str_pad($idFicha, 4, 0, STR_PAD_LEFT) ?></span></p>
+				<button class="btn btn-sm ml-3" style="background:#C59641;color:#fff;border-color:#C59641;" title="Ficha PDF con asesor" onclick="abrirModalAsesor(<?= $idFicha ?>)"><i class="bi bi-file-pdf"></i> Ver ficha con asesor</button>
+			</div>
 		</div>
 		<form id="formEditarFicha">
 			<input type="hidden" name="idFicha" value="<?= $idFicha ?>">
 			<div class="card">
 				<div class="card-body">
-
 					<p>Modifique los campos que desee actualizar.</p>
+				</div>
+			</div>
+
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="text-uppercase" style="color:#C59641;border-bottom:2px solid #C59641;padding-bottom:6px;"><i class="bi bi-info-circle"></i> Información general</h5>
+
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Operación</label>
+						</div>
+						<div class="col-7">
+							<select class="form-control" name="txtOperacion">
+								<option value="venta" <?= ($row['tipo_operacion'] ?? 'venta') == 'venta' ? 'selected' : '' ?>>Venta</option>
+								<option value="alquiler" <?= ($row['tipo_operacion'] ?? '') == 'alquiler' ? 'selected' : '' ?>>Alquiler</option>
+								<option value="traspaso" <?= ($row['tipo_operacion'] ?? '') == 'traspaso' ? 'selected' : '' ?>>Traspaso</option>
+								<option value="permuta" <?= ($row['tipo_operacion'] ?? '') == 'permuta' ? 'selected' : '' ?>>Permuta</option>
+							</select>
+						</div>
+					</div>
 					<div class="form-row">
 						<div class="col-3">
 							<label for="">Título de la ficha</label>
@@ -91,30 +116,6 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 					</div>
 					<div class="form-row">
 						<div class="col-3">
-							<label for="">Área del terreno</label>
-						</div>
-						<div class="col-7">
-							<input type="text" class="form-control" name="txtATerreno" value="<?= htmlspecialchars($row['fichAreaTerreno']) ?>" autocomplete="off">
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="col-3">
-							<label for="">Área de construcción</label>
-						</div>
-						<div class="col-7">
-							<input type="text" class="form-control" name="txtAConstruccion" value="<?= htmlspecialchars($row['fichAreaConstruccion']) ?>" autocomplete="off">
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="col-3">
-							<label for="">Frontis</label>
-						</div>
-						<div class="col-7">
-							<input type="text" class="form-control" name="txtFrontis" value="<?= htmlspecialchars($row['fichFrontis']) ?>" autocomplete="off">
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="col-3">
 							<label for="">Dormitorios</label>
 						</div>
 						<div class="col-7">
@@ -131,7 +132,7 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 					</div>
 					<div class="form-row">
 						<div class="col-3">
-							<label for="">Medio Baños</label>
+							<label for="">Medio baños</label>
 						</div>
 						<div class="col-7">
 							<input type="text" class="form-control" name="txtMediosBanios" value="<?= htmlspecialchars($row['medios_banios']) ?>" autocomplete="off">
@@ -147,21 +148,107 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 					</div>
 					<div class="form-row">
 						<div class="col-3">
-							<label for="">Descripción</label>
-						</div>
-						<div class="col-7">
-							<input type="hidden" name="txtDescripcion" id="txtDescripcion">
-							<div id="editorDescripcion" style="min-height:200px;"><?= $row['fichDescipcion'] ?></div>
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="col-3">
 							<label for="">Antigüedad</label>
 						</div>
 						<div class="col-7">
 							<input type="text" class="form-control" name="txtAntiguedad" value="<?= htmlspecialchars($row['antiguedad']) ?>" autocomplete="off">
 						</div>
 					</div>
+				</div>
+			</div>
+
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="text-uppercase" style="color:#C59641;border-bottom:2px solid #C59641;padding-bottom:6px;"><i class="bi bi-arrows-angle-expand"></i> Superficies y medidas</h5>
+
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Terreno</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtATerreno" value="<?= htmlspecialchars($row['fichAreaTerreno']) ?>" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Total construido</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtAConstruccion" value="<?= htmlspecialchars($row['fichAreaConstruccion']) ?>" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Superficie descubierta</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtSuperficieDescubierta" value="<?= htmlspecialchars($row['superficie_descubierta']) ?>" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Superficie semicubierta</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtSuperficieSemicubierta" value="<?= htmlspecialchars($row['superficie_semicubierta']) ?>" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Superficie cubierta</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtSuperficieCubierta" value="<?= htmlspecialchars($row['superficie_cubierta']) ?>" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Frontis</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtFrontis" value="<?= htmlspecialchars($row['fichFrontis']) ?>" autocomplete="off">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="text-uppercase" style="color:#C59641;border-bottom:2px solid #C59641;padding-bottom:6px;"><i class="bi bi-text-paragraph"></i> Descripción</h5>
+
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Resumen</label>
+						</div>
+						<div class="col-7">
+							<textarea class="form-control" name="txtResumen" rows="4" autocomplete="off"><?= htmlspecialchars($row['resumen'] ?? '') ?></textarea>
+						</div>
+					</div>
+					<div class="form-row mt-4">
+						<div class="col-3">
+							<label for="">Descripción</label>
+						</div>
+						<div class="col-7">
+							<input type="hidden" name="txtDescripcion" id="txtDescripcion">
+							<div id="editorDescripcion" style="min-height:150px;"><?= $row['fichDescipcion'] ?></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="text-uppercase" style="color:#C59641;border-bottom:2px solid #C59641;padding-bottom:6px;"><i class="bi bi-star"></i> Beneficios</h5>
+
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Beneficios</label>
+						</div>
+						<div class="col-7">
+							<textarea class="form-control" name="txtBeneficios" rows="4" autocomplete="off"><?= htmlspecialchars($row['beneficios']) ?></textarea>
+						</div>
+					</div>
+
 					<div class="form-row">
 						<div class="col-3">
 							<label for="">Asesor</label>
@@ -210,14 +297,14 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 					<div id="dropzone" class="dropzone text-center p-4 border border-2 border-dashed rounded cursor-pointer">
 						<input type="file" id="fileInput" accept="image/*" multiple style="display:none">
 						<p class="mb-1"><i class="icofont-cloud-upload" style="font-size:42px;color:#6c757d;"></i></p>
-						<p class="mb-1 font-weight-bold">Arrastra y suelta fotos nuevas aquí</p>
+						<p class="mb-1 font-weight-bold"><i class="bi bi-file-earmark-arrow-up"></i> Arrastra y suelta fotos nuevas aquí</p>
 						<p class="text-muted mb-0">o haz clic para agregar · <small>Máx. 8 en total</small></p>
 					</div>
 					<p class="text-muted small mb-2"><i class="bi bi-arrow-up-down"></i> Arrastra las fotos existentes para reordenarlas</p>
 					<div id="fotosPreview" class="row mt-3"></div>
 					<input type="hidden" name="ordenFotos" id="txtOrdenFotos">
 					<div class="d-flex justify-content-center mt-4">
-						<button type="submit" class="btn btn-outline-warning btn-lg" id="btnGuardarFicha"><i class="bi bi-arrow-clockwise"></i> Guardar cambios</button>
+						<button type="submit" class="btn btn-lg" id="btnGuardarFicha" style="background:#C59641;color:#fff;border-color:#C59641;"><i class="bi bi-floppy"></i> Guardar cambios</button>
 					</div>
 				</div>
 			</div>
@@ -236,6 +323,26 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 	</div>
 
 	<?php include "footers.php" ?>
+
+	<!-- Modal seleccionar asesor para ficha PDF -->
+	<div class="modal fade" id="modalAsesor" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header border-0">
+					<h5 class="modal-title">Seleccionar asesor</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<select id="selectAsesor" class="form-control">
+						<option value="">-- Cargando --</option>
+					</select>
+				</div>
+				<div class="modal-footer border-0">
+					<button type="button" class="btn" style="background:#C59641;color:#fff;border-color:#C59641;" id="btnVerFichaAsesor"><i class="bi bi-file-pdf"></i> Ver ficha con asesor</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
 	<script>
 		<?php if (isset($_GET['creada'])): ?>
@@ -277,7 +384,7 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 				var div = $('<div class="position-relative border rounded overflow-hidden" style="background:#f5f5f5;"></div>');
 				div.append('<img src="images/inmuebles/' + nombre + '?t=' + Date.now() + '" class="img-fluid" style="height:120px;width:100%;object-fit:cover;cursor:grab">');
 				div.append('<div class="position-absolute" style="top:4px;right:4px;display:flex;gap:4px;">' +
-					'<span class="badge" style="font-size:10px;padding:3px 6px;margin-right:4px;background-color:#333638;line-height:1rem;color:#fff">En línea</span>' +
+					'<span class="badge" style="font-size:10px;padding:3px 6px;margin-right:4px;background-color:#1a1c1d;line-height:1rem;color:#fff">En línea</span>' +
 					'<button type="button" class="btn btn-danger btn-sm" style="line-height:1;padding:2px 6px;font-size:16px;border-radius:50%" onclick="eliminarExistente(' + index + ')">&times;</button>' +
 					'</div>');
 				col.append(div);
@@ -424,8 +531,61 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 				}
 			});
 		});
+
+	var idFichaActual = <?= $idFicha ?>;
+
+	function abrirModalAsesor(idFicha) {
+		idFichaActual = idFicha;
+		$('#selectAsesor').html('<option value="">Cargando...</option>');
+		fetch('api/asesores.php')
+			.then(res => res.json())
+			.then(data => {
+				var select = $('#selectAsesor');
+				select.empty();
+				select.append('<option value="">-- Seleccione --</option>');
+				data.forEach(function(a) {
+					select.append('<option value="' + a.idAsesor + '">' + a.aseNombre + '</option>');
+				});
+				$('#modalAsesor').modal('show');
+			});
+	}
+
+	$(document).on('click', '#btnVerFichaAsesor', function() {
+		var idAsesor = $('#selectAsesor').val();
+		if (!idAsesor) {
+			alertify.error('Seleccione un asesor');
+			return;
+		}
+		var json = JSON.stringify({cursor: idFichaActual, asesor: parseInt(idAsesor)});
+		var invertido = json.split('').reverse().join('');
+		var codificado = btoa(invertido);
+		window.open('propiedad.php?p=' + codificado, '_blank');
+		$('#modalAsesor').modal('hide');
+	});
 	</script>
 	<style>
+		.form-row .col-7 {
+			max-width: 58.33%;
+			flex: 0 0 58.33%;
+			overflow: hidden;
+			min-width: 0;
+		}
+		.ql-toolbar.ql-snow,
+		.ql-container.ql-snow {
+			width: 100% !important;
+			max-width: 100% !important;
+			box-sizing: border-box;
+		}
+		.ql-toolbar.ql-snow {
+			white-space: normal !important;
+			flex-wrap: wrap;
+		}
+		.ql-editor {
+			width: 100% !important;
+			max-width: 100% !important;
+			word-wrap: break-word !important;
+			white-space: normal !important;
+		}
 		img {
 			max-width: 100vh;
 		}

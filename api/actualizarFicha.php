@@ -18,6 +18,8 @@ $mediosBanios = $cadena->real_escape_string($_POST['txtMediosBanios']);
 $cochera = $cadena->real_escape_string($_POST['txtCochera']);
 $descripcion = $cadena->real_escape_string($_POST['txtDescripcion']);
 $antiguedad = $cadena->real_escape_string($_POST['txtAntiguedad']);
+$beneficios = $cadena->real_escape_string($_POST['txtBeneficios']);
+$resumen = $cadena->real_escape_string($_POST['txtResumen']);
 $idAsesor = (int)$_POST['txtAsesor'];
 
 $sql = "UPDATE `fichas` SET
@@ -34,8 +36,11 @@ $sql = "UPDATE `fichas` SET
   `fichCochera` = '{$cochera}',
   `fichDescipcion` = '{$descripcion}',
   `antiguedad` = '{$antiguedad}',
+  `resumen` = '{$resumen}',
+  `beneficios` = '{$beneficios}',
   `idAsesor` = {$idAsesor},
-  `moneda` = '{$moneda}'
+  `moneda` = '{$moneda}',
+  `tipo_operacion` = '{$_POST['txtOperacion']}'
 WHERE `idFicha` = {$idFicha}";
 
 $cadena->query($sql);
