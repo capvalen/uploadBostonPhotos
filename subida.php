@@ -35,12 +35,29 @@ if (isset($_COOKIE['ckPower'])) {
 							<label for="">Operación</label>
 						</div>
 						<div class="col-7">
-							<select class="form-control" name="txtOperacion">
+							<select class="form-control" name="txtOperacion" id="txtOperacion">
+								<option value="anticresis">Anticresis</option>
 								<option value="venta">Venta</option>
 								<option value="alquiler">Alquiler</option>
-								<option value="traspaso">Traspaso</option>
-								<option value="permuta">Permuta</option>
 							</select>
+						</div>
+					</div>
+					<div id="divDatosAlquiler" style="display:none;">
+						<div class="form-row">
+							<div class="col-3">
+								<label for="">Garantía</label>
+							</div>
+							<div class="col-7">
+								<input type="text" class="form-control" name="txtGarantia" autocomplete="off" placeholder="Ej: 1 mes">
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col-3">
+								<label for="">Anticipo</label>
+							</div>
+							<div class="col-7">
+								<input type="text" class="form-control" name="txtAnticipo" autocomplete="off" placeholder="Ej: 1 mes">
+							</div>
 						</div>
 					</div>
 					<div class="form-row">
@@ -178,6 +195,38 @@ if (isset($_COOKIE['ckPower'])) {
 							<input type="text" class="form-control" name="txtFrontis" autocomplete="off">
 						</div>
 					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Pisos</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtPisos" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Azoteas</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtAzoteas" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Área de construcción</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtAreaConstruccion" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Área de cochera</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtAreaCochera" autocomplete="off">
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -231,6 +280,48 @@ if (isset($_COOKIE['ckPower'])) {
 								while ($rowAsesor = $resultadoAsesor->fetch_assoc()) { ?>
 									<option value="<?= $rowAsesor['idAsesor']; ?>"><?= $rowAsesor['aseNombre']; ?></option>
 								<?php } ?>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="text-uppercase" style="color:#C59641;border-bottom:2px solid #C59641;padding-bottom:6px;"><i class="bi bi-tools"></i> Servicios</h5>
+
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Agua</label>
+						</div>
+						<div class="col-7">
+							<select class="form-control" name="txtServicioAgua">
+								<option value="">Sin especificar</option>
+								<option value="Sí">Sí</option>
+								<option value="No">No</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Luz</label>
+						</div>
+						<div class="col-7">
+							<select class="form-control" name="txtServicioLuz">
+								<option value="">Sin especificar</option>
+								<option value="Sí">Sí</option>
+								<option value="No">No</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Desagüe</label>
+						</div>
+						<div class="col-7">
+							<select class="form-control" name="txtServicioDesague">
+								<option value="">Sin especificar</option>
+								<option value="Sí">Sí</option>
+								<option value="No">No</option>
 							</select>
 						</div>
 					</div>
@@ -290,6 +381,17 @@ if (isset($_COOKIE['ckPower'])) {
 				]
 			}
 		});
+
+		// Toggle garantía/anticipo según tipo de operación
+		function toggleDatosAlquiler() {
+			if ($('#txtOperacion').val() === 'alquiler') {
+				$('#divDatosAlquiler').slideDown(200);
+			} else {
+				$('#divDatosAlquiler').slideUp(200);
+			}
+		}
+		$('#txtOperacion').on('change', toggleDatosAlquiler);
+		toggleDatosAlquiler();
 
 		function pantallaOver(tipo) {
 			if (tipo) {
@@ -447,6 +549,10 @@ if (isset($_COOKIE['ckPower'])) {
 
 		.fixed-top {
 			top: 50px;
+			pointer-events: none;
+		}
+		.fixed-top .toast {
+			pointer-events: auto;
 		}
 
 		#overlay {

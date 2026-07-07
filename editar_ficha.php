@@ -18,7 +18,10 @@ $sql = "SELECT `idFicha`, `fichTitulo`, `fichPrecio`, `fichDireccion`, `fichTipo
   `fichAreaTerreno`, `fichAreaConstruccion`, `superficie_descubierta`, `superficie_semicubierta`, `superficie_cubierta`,
   `fichFrontis`, `fichDormitorios`,
   `fichBanios`, `medios_banios`, `fichCochera`, `fichDescipcion`, `antiguedad`,
-  `idAsesor`, `fotos`, `moneda`, `beneficios`, `resumen`, `tipo_operacion`
+  `idAsesor`, `fotos`, `moneda`, `beneficios`, `resumen`, `tipo_operacion`,
+  `pisos`, `azoteas`, `area_contruccion`, `area_cochera`,
+  `servicio_agua`, `servicio_luz`, `servicio_desague`,
+  `garantia`, `anticipo`
   FROM `fichas` WHERE idFicha = {$idFicha}";
 /** @var mysqli $cadena */
 $resultado = $cadena->query($sql);
@@ -66,12 +69,29 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 							<label for="">Operación</label>
 						</div>
 						<div class="col-7">
-							<select class="form-control" name="txtOperacion">
+							<select class="form-control" name="txtOperacion" id="txtOperacion">
+								<option value="anticresis" <?= ($row['tipo_operacion'] ?? 'venta') == 'anticresis' ? 'selected' : '' ?>>Anticresis</option>
 								<option value="venta" <?= ($row['tipo_operacion'] ?? 'venta') == 'venta' ? 'selected' : '' ?>>Venta</option>
 								<option value="alquiler" <?= ($row['tipo_operacion'] ?? '') == 'alquiler' ? 'selected' : '' ?>>Alquiler</option>
-								<option value="traspaso" <?= ($row['tipo_operacion'] ?? '') == 'traspaso' ? 'selected' : '' ?>>Traspaso</option>
-								<option value="permuta" <?= ($row['tipo_operacion'] ?? '') == 'permuta' ? 'selected' : '' ?>>Permuta</option>
 							</select>
+						</div>
+					</div>
+					<div id="divDatosAlquiler" style="<?= ($row['tipo_operacion'] ?? '') == 'alquiler' ? '' : 'display:none;' ?>">
+						<div class="form-row">
+							<div class="col-3">
+								<label for="">Garantía</label>
+							</div>
+							<div class="col-7">
+								<input type="text" class="form-control" name="txtGarantia" value="<?= htmlspecialchars($row['garantia']) ?>" autocomplete="off" placeholder="Ej: 1 mes">
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col-3">
+								<label for="">Anticipo</label>
+							</div>
+							<div class="col-7">
+								<input type="text" class="form-control" name="txtAnticipo" value="<?= htmlspecialchars($row['anticipo']) ?>" autocomplete="off" placeholder="Ej: 1 mes">
+							</div>
 						</div>
 					</div>
 					<div class="form-row">
@@ -209,6 +229,38 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 							<input type="text" class="form-control" name="txtFrontis" value="<?= htmlspecialchars($row['fichFrontis']) ?>" autocomplete="off">
 						</div>
 					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Pisos</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtPisos" value="<?= htmlspecialchars($row['pisos']) ?>" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Azoteas</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtAzoteas" value="<?= htmlspecialchars($row['azoteas']) ?>" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Área de construcción</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtAreaConstruccion" value="<?= htmlspecialchars($row['area_contruccion']) ?>" autocomplete="off">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Área de cochera</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtAreaCochera" value="<?= htmlspecialchars($row['area_cochera']) ?>" autocomplete="off">
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -264,6 +316,49 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 								?>
 									<option value="<?= $rowAsesor['idAsesor'] ?>"<?= $selected ?>><?= $rowAsesor['aseNombre'] ?></option>
 								<?php } ?>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="text-uppercase" style="color:#C59641;border-bottom:2px solid #C59641;padding-bottom:6px;"><i class="bi bi-tools"></i> Servicios</h5>
+
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Agua</label>
+						</div>
+						<div class="col-7">
+							<select class="form-control" name="txtServicioAgua">
+								<option value="" <?= ($row['servicio_agua'] ?? '') == '' ? 'selected' : '' ?>>Sin especificar</option>
+								<option value="Sí" <?= ($row['servicio_agua'] ?? '') == 'Sí' ? 'selected' : '' ?>>Sí</option>
+								<option value="No" <?= ($row['servicio_agua'] ?? '') == 'No' ? 'selected' : '' ?>>No</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Luz</label>
+						</div>
+						<div class="col-7">
+							<select class="form-control" name="txtServicioLuz">
+								<option value="" <?= ($row['servicio_luz'] ?? '') == '' ? 'selected' : '' ?>>Sin especificar</option>
+								<option value="Sí" <?= ($row['servicio_luz'] ?? '') == 'Sí' ? 'selected' : '' ?>>Sí</option>
+								<option value="No" <?= ($row['servicio_luz'] ?? '') == 'No' ? 'selected' : '' ?>>No</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Desagüe</label>
+						</div>
+						<div class="col-7">
+							<select class="form-control" name="txtServicioDesague">
+								<option value="" <?= ($row['servicio_desague'] ?? '') == '' ? 'selected' : '' ?>>Sin especificar</option>
+								<option value="Sí" <?= ($row['servicio_desague'] ?? '') == 'Sí' ? 'selected' : '' ?>>Sí</option>
+								<option value="No" <?= ($row['servicio_desague'] ?? '') == 'No' ? 'selected' : '' ?>>No</option>
 							</select>
 						</div>
 					</div>
@@ -361,6 +456,16 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 				]
 			}
 		});
+
+		// Toggle garantía/anticipo según tipo de operación
+		function toggleDatosAlquiler() {
+			if ($('#txtOperacion').val() === 'alquiler') {
+				$('#divDatosAlquiler').slideDown(200);
+			} else {
+				$('#divDatosAlquiler').slideUp(200);
+			}
+		}
+		$('#txtOperacion').on('change', toggleDatosAlquiler);
 
 		function pantallaOver(tipo) {
 			$('#overlay').css('display', tipo ? 'initial' : 'none');
@@ -613,6 +718,10 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 
 		.fixed-top {
 			top: 50px;
+			pointer-events: none;
+		}
+		.fixed-top .toast {
+			pointer-events: auto;
 		}
 
 		#overlay {

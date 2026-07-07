@@ -35,7 +35,10 @@ $sql = "SELECT `idFicha`, `fichTitulo`, `fichPrecio`, `moneda`, `fichDireccion`,
   `fichAreaTerreno`, `fichAreaConstruccion`, `fichFrontis`, `fichDormitorios`,
   `fichBanios`, `medios_banios`, `fichCochera`, `fichDescipcion`, `antiguedad`,
   `beneficios`, `fotos`, `resumen`, `tipo_operacion`,
-  `superficie_descubierta`, `superficie_semicubierta`, `superficie_cubierta`
+  `superficie_descubierta`, `superficie_semicubierta`, `superficie_cubierta`,
+  `pisos`, `azoteas`, `area_contruccion`, `area_cochera`,
+  `servicio_agua`, `servicio_luz`, `servicio_desague`,
+  `garantia`, `anticipo`
   FROM `fichas` WHERE idFicha = {$cursor}";
 /** @var mysqli $cadena */
 $resultado = $cadena->query($sql);
@@ -48,7 +51,7 @@ $row = $resultado->fetch_assoc();
 $codigo       = 'BR-' . str_pad($cursor, 4, 0, STR_PAD_LEFT);
 $tipo         = ucfirst($row['fichTipoPropiedad'] ?? 'Terreno');
 $titulo       = ucfirst($row['fichTitulo'] ?? '');
-$ubicacion    = 'Junín | Huancayo | Huancayo';
+$ubicacion    = $row['fichDireccion'] ?? '';
 $precioRaw      = $row['fichPrecio'];
 $precioFormateado = is_numeric($precioRaw) ? number_format($precioRaw, 0, ',', '.') : $precioRaw;
 $precio       = ($row['moneda'] == 'dólares' ? '$' : 'S/') . ' ' . $precioFormateado;
@@ -63,13 +66,23 @@ $totalConstruido    = ($row['fichAreaConstruccion'] ?? '-');
 $superficieDescub    = $row['superficie_descubierta'] ?? '-';
 $superficieSemicub   = $row['superficie_semicubierta'] ?? '-';
 $superficieCubierta  = $row['superficie_cubierta'] ?? '-';
+$pisos               = $row['pisos'] ?? '-';
+$azoteas             = $row['azoteas'] ?? '-';
+$areaContruccion     = $row['area_contruccion'] ?? '-';
+$areaCochera         = $row['area_cochera'] ?? '-';
+$frontis             = $row['fichFrontis'] ?? '-';
+$servicioAgua        = !empty($row['servicio_agua']) ? $row['servicio_agua'] : '—';
+$servicioLuz         = !empty($row['servicio_luz']) ? $row['servicio_luz'] : '—';
+$servicioDesague     = !empty($row['servicio_desague']) ? $row['servicio_desague'] : '—';
+$garantia            = $row['garantia'] ?? '';
+$anticipo            = $row['anticipo'] ?? '';
 $terreno             = ($row['fichAreaTerreno'] ?? '-');
 
 $descripcion = $row['fichDescipcion'] ? [$row['fichDescipcion']] : [];
 
 $datosRapidos = [
-	'Área Terreno: ' . ($row['fichAreaTerreno'] ?? ''),
-	'Área Construcción: ' . ($row['fichAreaConstruccion'] ?? ''),
+	'Área de terreno: ' . ($terreno ?? ''),
+	'Área de construcción: ' . ($areaContruccion ?? ''),
 	'Precio: ' . $precio,
 ];
 
@@ -121,7 +134,7 @@ if (!empty($idAsesor)) {
 	}
 }
 
-$firmaUrl = 'https://intranet.bostonabregurealty.com/images/firma.jpg?v=1';
+$firmaUrl = 'https://intranet.bostonabregurealty.com/images/firma_2026.jpg?v=1';
 $logoUrl  = 'https://intranet.bostonabregurealty.com/images/logo_amarillo.jpg';
 
 $footerCertificacion = 'Boston Abregu Realty certificada por el Ministerio de Vivienda, Construcción y Saneamiento del Perú';
@@ -212,7 +225,7 @@ ob_start();
 
 		table.datos td {
 			padding: 2px 4px 2px 0;
-			font-size: 11px;
+			font-size: 10px;
 			vertical-align: top;
 			width: 33%;
 		}
@@ -276,6 +289,7 @@ ob_start();
 		.venta-precio-wrap {
 			width: 100%;
 			text-align: left;
+			margin-top: 10px;
 			margin-bottom: 6px;
 		}
 
@@ -309,7 +323,7 @@ ob_start();
 		.foto-principal {
 			width: 100%;
 			border-collapse: collapse;
-			margin-bottom: 5px;
+			margin-bottom: 3px;
 		}
 
 		.foto-principal td {
@@ -321,7 +335,7 @@ ob_start();
 			width: 100%;
 			height: 190px;
 			object-fit: cover;
-			border: 1px solid #ddd;
+			/* border: 1px solid #ddd; */
 		}
 
 		table.grid-fotos {
@@ -332,21 +346,25 @@ ob_start();
 
 		table.grid-fotos td {
 			width: 33.33%;
-			padding: 2px;
+			padding: 4px;
 		}
 
 		table.grid-fotos img {
 			width: 100%;
 			height: 95px;
 			object-fit: cover;
-			border: 1px solid #ddd;
+			/* border: 1px solid #ddd; */
 		}
 
 		.asesor-tabla {
-			width: 100%;
+			width: 50%;
 			border-collapse: collapse;
 			margin-top: 4px;
 			font-size: 8.5px;
+			position: fixed;
+			top: 73%;
+			right: 0%;
+			transform: translateY(-50%);
 		}
 
 		.asesor-tabla td {
@@ -367,7 +385,7 @@ ob_start();
 		.asesor-label {
 			background: <?= $colorPrincipal ?>;
 			color: #fff;
-			font-size: 7.5px;
+			font-size: 10.5px;
 			font-weight: bold;
 			padding: 2px 6px;
 			display: inline-block;
@@ -398,13 +416,13 @@ ob_start();
 		}
 
 		.asesor-dato {
-			font-size: 8px;
-			line-height: 1.4;
-			margin: 1px 0;
+			font-size: 10.5px;
+			line-height: 1.5;
+			margin: 2px 0;
 		}
 
 		.asesor-dato b {
-			font-size: 8.5px;
+			font-size: 10.5px;
 		}
 
 		.firma-url {
@@ -453,6 +471,8 @@ ob_start();
 		<tr>
 			<!-- ===================== COLUMNA IZQUIERDA ===================== -->
 			<td class="col-left">
+				<div style="text-align:center;"><img src="https://intranet.bostonabregurealty.com/images/logo_negro.png?v=1.1" style="max-width:250px;"></div>
+				<div style="text-align:center; font-size:11px; font-weight:bold; color:#1b2a4a; line-height:1.4; margin-bottom:12px;">AHORA ES MÁS FÁCIL EN HUANCAYO, OXAPAMPA Y SELVA CENTRAL<br> COMPRAR, VENDER Y ALQUILAR TU PROPIEDAD CON GARANTÍA</div>
 				<div class="codigo"><?= htmlspecialchars($codigo) ?> | <?= htmlspecialchars($tipo) ?></div>
 				<h1 class="titulo"><?= htmlspecialchars($titulo) ?></h1>
 				<div class="ubicacion"><?= htmlspecialchars($ubicacion) ?></div>
@@ -460,28 +480,34 @@ ob_start();
 				<h2 class="seccion">Información General</h2>
 				<table class="datos">
 					<tr>
-						<td>Baños: <b><?= $banos ?></b></td>
+						<td>Dormitorios: <b><?= $dormitorios ?></b></td>
 						<td>Medio Baños: <b><?= $medioBanos ?></b></td>
 						<td>Antigüedad: <b><?= htmlspecialchars($antiguedad) ?></b></td>
 					</tr>
 					<tr>
-						<td>Dormitorios: <b><?= $dormitorios ?></b></td>
+						<td>Baños: <b><?= $banos ?></b></td>
 						<td>Cocheras: <b><?= $cocheras ?></b></td>
-						<td></td>
+						<td>Pisos: <b><?= str_replace('m2', 'm²', htmlspecialchars($pisos)) ?></b></td>
 					</tr>
 				</table>
 
 				<h2 class="seccion">Superficies y Medidas</h2>
 				<table class="datos">
 					<tr>
-						<td>Total construido: <b><?= str_replace('m2', 'm²', htmlspecialchars($totalConstruido)) ?></b></td>
-						<td>Sup. descubierta: <b><?= str_replace('m2', 'm²', htmlspecialchars($superficieDescub)) ?></b></td>
-						<td>Sup. semicubierta: <b><?= str_replace('m2', 'm²', htmlspecialchars($superficieSemicub)) ?></b></td>
+						<td>Área de construcción: <b><?= str_replace('m2', 'm²', htmlspecialchars($areaContruccion)) ?></b></td>
+						<td>Área de terreno: <b><?= str_replace('m2', 'm²', htmlspecialchars($terreno)) ?></b></td>
 					</tr>
 					<tr>
+						<td>Sup. descubierta: <b><?= str_replace('m2', 'm²', htmlspecialchars($superficieDescub)) ?></b></td>
+						<td>Sup. semicubierta: <b><?= str_replace('m2', 'm²', htmlspecialchars($superficieSemicub)) ?></b></td>
 						<td>Superficie cubierta: <b><?= str_replace('m2', 'm²', htmlspecialchars($superficieCubierta)) ?></b></td>
-						<td>Terreno: <b><?= str_replace('m2', 'm²', htmlspecialchars($terreno)) ?></b></td>
-						<td></td>
+
+					</tr>
+					<tr>
+						<td>Área de cochera: <b><?= str_replace('m2', 'm²', htmlspecialchars($areaCochera)) ?></b></td>
+						<td>Frontis: <b><?= str_replace('m2', 'm²', htmlspecialchars($frontis)) ?></b></td>
+						<td>Azoteas: <b><?= str_replace('m2', 'm²', htmlspecialchars($azoteas)) ?></b></td>
+
 					</tr>
 				</table>
 
@@ -490,12 +516,6 @@ ob_start();
 				<?php if (!empty($row['resumen'])): ?>
 					<p class="parrafo"><b><?= nl2br(htmlspecialchars($row['resumen'])) ?></b></p>
 				<?php endif; ?>
-
-				<ul class="lista">
-					<?php foreach ($datosRapidos as $dato): ?>
-						<li><?= str_replace('m2', 'm²', htmlspecialchars($dato)) ?></li>
-					<?php endforeach; ?>
-				</ul>
 
 				<p class="parrafo"><b>Características:</b></p>
 				<div class="lista-caracteristicas">
@@ -508,6 +528,26 @@ ob_start();
 					<b>Beneficios:</b><br><b><?= htmlspecialchars($beneficios) ?></b>
 				</div>
 
+				<h2 class="seccion">Servicios</h2>
+				<table class="datos">
+					<tr>
+						<td>Agua: <b><?= htmlspecialchars($servicioAgua) ?></b></td>
+						<td>Luz: <b><?= htmlspecialchars($servicioLuz) ?></b></td>
+						<td>Desagüe: <b><?= htmlspecialchars($servicioDesague) ?></b></td>
+					</tr>
+				</table>
+
+				<?php if (($row['tipo_operacion'] ?? '') == 'alquiler'): ?>
+				<h2 class="seccion">Condiciones de alquiler</h2>
+				<table class="datos">
+					<tr>
+						<td>Garantía: <b><?= htmlspecialchars($garantia) ?></b></td>
+						<td>Anticipo: <b><?= htmlspecialchars($anticipo) ?></b></td>
+						<td></td>
+					</tr>
+				</table>
+				<?php endif; ?>
+
 				<div class="nota">
 					<b>Nota importante:</b> <?= nl2br(htmlspecialchars($notaImportante)) ?>
 				</div>
@@ -519,8 +559,8 @@ ob_start();
 				<div class="venta-precio-wrap">
 					<table class="venta-precio">
 						<tr>
-							<td class="badge-venta"><?= strtoupper(htmlspecialchars($row['tipo_operacion'] ?? 'VENTA')) ?></td>
-							<td class="precio"><?= htmlspecialchars($precio) ?></td>
+							<td class="badge-venta"><?= strtoupper(htmlspecialchars($tipo)) ." EN ". strtoupper(htmlspecialchars($row['tipo_operacion'] ?? 'VENTA')) ?></td>
+							<td class="precio"><?= str_replace('m2', 'm²', htmlspecialchars($precio)) ?></td>
 						</tr>
 					</table>
 				</div>
