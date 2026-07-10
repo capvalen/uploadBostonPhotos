@@ -78,7 +78,7 @@ if( isset($_COOKIE['ckPower'])){
 
 	<div class=" row">
 		<div class="col text-center">
-			<img src="images/logo.png" class=" img-fluid mx-auto mt-2">
+			<div class="mx-auto"><img src="images/logo_negro.png?v=1.0" class="" style="width:300px;padding-top:2px"></div>
 			<h3 class="my-3">Nuevo asesor</h3>
 		</div>
 	</div>
