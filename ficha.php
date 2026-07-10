@@ -29,14 +29,14 @@ session_cache_limiter('none');
 				<div class="row mb-2">
 					<div class="col  ">
 						<div class="card">
-							<div class="card-body">
+							<div class="card-body px-4 py-2">
 								<div class=" d-flex justify-content-between">
 									<?php if ($_COOKIE['ckPower'] == 1): ?>
-										<div><a href="subida.php" class="btn d-block btn-dark mb-2"><i class="bi bi-asterisk"></i> Crear ficha</a></div>
+										<div><a href="subida.php" class="btn d-block btn-dark mb-0"><i class="bi bi-asterisk"></i> Crear ficha</a></div>
 									<?php endif; ?>
 									<div class="form-inline">
 										<label class="" for="inlineFormInputName2"><i class="bi bi-search"></i> <span class="mx-2">Buscador:</span></label>
-										<input type="text" class="form-control mb-2 mx-2" id="txtBuscador">
+										<input type="text" class="form-control mx-2" id="txtBuscador">
 									</div>
 								</div>
 							</div>
