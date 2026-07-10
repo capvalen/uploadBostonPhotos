@@ -20,7 +20,7 @@ $sql = "SELECT `idFicha`, `fichTitulo`, `fichPrecio`, `fichDireccion`, `fichTipo
   `fichBanios`, `medios_banios`, `fichCochera`, `fichDescipcion`, `antiguedad`,
   `idAsesor`, `fotos`, `moneda`, `beneficios`, `resumen`, `tipo_operacion`,
   `pisos`, `azoteas`, `area_contruccion`, `area_cochera`,
-  `servicio_agua`, `servicio_luz`, `servicio_desague`,
+  `servicio_agua`, `servicio_luz`, `servicio_desague`, `mantenimiento`,
   `garantia`, `anticipo`
   FROM `fichas` WHERE idFicha = {$idFicha}";
 /** @var mysqli $cadena */
@@ -197,7 +197,7 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 							<input type="text" class="form-control" name="txtAConstruccion" value="<?= htmlspecialchars($row['fichAreaConstruccion']) ?>" autocomplete="off">
 						</div>
 					</div>
-					<div class="form-row">
+					<div class="form-row d-none">
 						<div class="col-3">
 							<label for="">Superficie descubierta</label>
 						</div>
@@ -205,7 +205,7 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 							<input type="text" class="form-control" name="txtSuperficieDescubierta" value="<?= htmlspecialchars($row['superficie_descubierta']) ?>" autocomplete="off">
 						</div>
 					</div>
-					<div class="form-row">
+					<div class="form-row d-none">
 						<div class="col-3">
 							<label for="">Superficie semicubierta</label>
 						</div>
@@ -213,7 +213,7 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 							<input type="text" class="form-control" name="txtSuperficieSemicubierta" value="<?= htmlspecialchars($row['superficie_semicubierta']) ?>" autocomplete="off">
 						</div>
 					</div>
-					<div class="form-row">
+					<div class="form-row d-none">
 						<div class="col-3">
 							<label for="">Superficie cubierta</label>
 						</div>
@@ -360,6 +360,14 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 								<option value="Sí" <?= ($row['servicio_desague'] ?? '') == 'Sí' ? 'selected' : '' ?>>Sí</option>
 								<option value="No" <?= ($row['servicio_desague'] ?? '') == 'No' ? 'selected' : '' ?>>No</option>
 							</select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Mantenimiento</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtMantenimiento" value="<?= htmlspecialchars($row['mantenimiento'] ?? '') ?>" autocomplete="off">
 						</div>
 					</div>
 				</div>

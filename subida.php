@@ -163,7 +163,7 @@ if (isset($_COOKIE['ckPower'])) {
 							<input type="text" class="form-control" name="txtAConstruccion" autocomplete="off">
 						</div>
 					</div>
-					<div class="form-row">
+					<div class="form-row d-none">
 						<div class="col-3">
 							<label for="">Superficie descubierta</label>
 						</div>
@@ -171,7 +171,7 @@ if (isset($_COOKIE['ckPower'])) {
 							<input type="text" class="form-control" name="txtSuperficieDescubierta" autocomplete="off">
 						</div>
 					</div>
-					<div class="form-row">
+					<div class="form-row d-none">
 						<div class="col-3">
 							<label for="">Superficie semicubierta</label>
 						</div>
@@ -179,7 +179,7 @@ if (isset($_COOKIE['ckPower'])) {
 							<input type="text" class="form-control" name="txtSuperficieSemicubierta" autocomplete="off">
 						</div>
 					</div>
-					<div class="form-row">
+					<div class="form-row d-none">
 						<div class="col-3">
 							<label for="">Superficie cubierta</label>
 						</div>
@@ -323,6 +323,14 @@ if (isset($_COOKIE['ckPower'])) {
 								<option value="Sí">Sí</option>
 								<option value="No">No</option>
 							</select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-3">
+							<label for="">Mantenimiento</label>
+						</div>
+						<div class="col-7">
+							<input type="text" class="form-control" name="txtMantenimiento" autocomplete="off">
 						</div>
 					</div>
 				</div>

@@ -37,7 +37,7 @@ $sql = "SELECT `idFicha`, `fichTitulo`, `fichPrecio`, `moneda`, `fichDireccion`,
   `beneficios`, `fotos`, `resumen`, `tipo_operacion`,
   `superficie_descubierta`, `superficie_semicubierta`, `superficie_cubierta`,
   `pisos`, `azoteas`, `area_contruccion`, `area_cochera`,
-  `servicio_agua`, `servicio_luz`, `servicio_desague`,
+  `servicio_agua`, `servicio_luz`, `servicio_desague`, `mantenimiento`,
   `garantia`, `anticipo`
   FROM `fichas` WHERE idFicha = {$cursor}";
 /** @var mysqli $cadena */
@@ -74,6 +74,7 @@ $frontis             = $row['fichFrontis'] ?? '-';
 $servicioAgua        = !empty($row['servicio_agua']) ? $row['servicio_agua'] : '—';
 $servicioLuz         = !empty($row['servicio_luz']) ? $row['servicio_luz'] : '—';
 $servicioDesague     = !empty($row['servicio_desague']) ? $row['servicio_desague'] : '—';
+$mantenimiento       = !empty($row['mantenimiento']) ? $row['mantenimiento'] : '—';
 $garantia            = $row['garantia'] ?? '';
 $anticipo            = $row['anticipo'] ?? '';
 $terreno             = ($row['fichAreaTerreno'] ?? '-');
@@ -112,6 +113,8 @@ foreach ($fotosGuardadas as $i => $foto) {
 		$fotosGrid[] = $baseImg . $foto;
 	}
 }
+// Limitar grid a máximo 4 fotos (índices 2,3,4,5 → fotos #3 a #6)
+$fotosGrid = array_slice($fotosGrid, 0, 4);
 $mapaImg = ''; // Placeholder
 
 // Agente
@@ -133,6 +136,75 @@ if (!empty($idAsesor)) {
 		$agenteFotoUrl = $baseEmpleado . $idAsesor . '_foto1.jpg';
 	}
 }
+
+// ---------------------------------------------------------------------
+// Recorta una imagen remota a un cuadrado (para foto circular del asesor).
+// Como las fotos que nos entregan son rectangulares "altas", recortamos
+// dando prioridad a la parte SUPERIOR de la imagen (donde suele estar el
+// rostro), en vez de un recorte centrado que podría cortar la cabeza.
+//
+// $focusY: 0.0 = pegado arriba, 1.0 = pegado abajo, 0.5 = centrado.
+// ---------------------------------------------------------------------
+function recortarImagenCuadradaBase64(string $url, int $size = 300, float $focusY = 0.12): ?string
+{
+	$contexto = stream_context_create([
+		'http' => [
+			'timeout' => 5,
+			'header'  => "User-Agent: Mozilla/5.0\r\n",
+		],
+	]);
+
+	$binario = @file_get_contents($url, false, $contexto);
+	if ($binario === false) {
+		return null;
+	}
+
+	$origen = @imagecreatefromstring($binario);
+	if (!$origen) {
+		return null;
+	}
+
+	$anchoOrig = imagesx($origen);
+	$altoOrig  = imagesy($origen);
+	$lado      = min($anchoOrig, $altoOrig);
+
+	// Centrado horizontal, con sesgo vertical hacia arriba
+	$srcX   = intdiv($anchoOrig - $lado, 2);
+	$maxY   = $altoOrig - $lado;
+	$srcY   = (int) round($maxY * $focusY);
+	$srcY   = max(0, min($srcY, $maxY));
+
+	$destino = imagecreatetruecolor($size, $size);
+	// Fondo blanco por si el JPG tiene transparencia rara al reescalar
+	$blanco = imagecolorallocate($destino, 255, 255, 255);
+	imagefill($destino, 0, 0, $blanco);
+
+	imagecopyresampled(
+		$destino,
+		$origen,
+		0,
+		0,
+		$srcX,
+		$srcY,
+		$size,
+		$size,
+		$lado,
+		$lado
+	);
+
+	ob_start();
+	imagejpeg($destino, null, 88);
+	$binarioFinal = ob_get_clean();
+
+	imagedestroy($origen);
+	imagedestroy($destino);
+
+	return 'data:image/jpeg;base64,' . base64_encode($binarioFinal);
+}
+
+// Recortamos la foto original (rectangular) a un cuadrado en base64,
+// priorizando la parte superior para no cortar el rostro.
+$agenteFotoBase64 = $agenteFotoUrl ? recortarImagenCuadradaBase64($agenteFotoUrl) : null;
 
 $firmaUrl = 'https://intranet.bostonabregurealty.com/images/firma_2026.jpg?v=1';
 $logoUrl  = 'https://intranet.bostonabregurealty.com/images/logo_amarillo.jpg';
@@ -205,7 +277,7 @@ ob_start();
 
 		.ubicacion {
 			color: #555;
-			font-size: 9px;
+			font-size: 10px;
 			margin-bottom: 10px;
 		}
 
@@ -227,7 +299,7 @@ ob_start();
 			padding: 2px 4px 2px 0;
 			font-size: 10px;
 			vertical-align: top;
-			width: 33%;
+			width: 25%;
 		}
 
 		table.datos td b {
@@ -289,8 +361,8 @@ ob_start();
 		.venta-precio-wrap {
 			width: 100%;
 			text-align: left;
-			margin-top: 10px;
-			margin-bottom: 6px;
+			margin-bottom: 2px;
+			font-size: 12px;
 		}
 
 		table.venta-precio {
@@ -300,7 +372,7 @@ ob_start();
 		}
 
 		table.venta-precio td {
-			padding: 6px 16px;
+			padding: 4px 10px;
 			vertical-align: middle;
 		}
 
@@ -308,12 +380,12 @@ ob_start();
 			background: <?= $colorPrincipal ?>;
 			color: #fff;
 			font-weight: bold;
-			font-size: 11px;
+			font-size: 12px;
 			text-align: center;
 		}
 
 		.precio {
-			font-size: 14px;
+			font-size: 12px;
 			font-weight: bold;
 			color: #1b2a4a;
 			text-align: center;
@@ -323,17 +395,17 @@ ob_start();
 		.foto-principal {
 			width: 100%;
 			border-collapse: collapse;
-			margin-bottom: 3px;
+			margin-bottom: 0px;
 		}
 
 		.foto-principal td {
 			width: 50%;
-			padding: 2px;
+			padding: 1px;
 		}
 
 		.foto-principal img {
 			width: 100%;
-			height: 190px;
+			height: 165px;
 			object-fit: cover;
 			/* border: 1px solid #ddd; */
 		}
@@ -345,13 +417,13 @@ ob_start();
 		}
 
 		table.grid-fotos td {
-			width: 33.33%;
-			padding: 4px;
+			width: 50%;
+			padding: 1px;
 		}
 
 		table.grid-fotos img {
 			width: 100%;
-			height: 95px;
+			height: 165px;
 			object-fit: cover;
 			/* border: 1px solid #ddd; */
 		}
@@ -362,7 +434,7 @@ ob_start();
 			margin-top: 4px;
 			font-size: 8.5px;
 			position: fixed;
-			top: 73%;
+			top: 77.5%;
 			right: 0%;
 			transform: translateY(-50%);
 		}
@@ -389,13 +461,13 @@ ob_start();
 			font-weight: bold;
 			padding: 2px 6px;
 			display: inline-block;
-			margin-bottom: 4px;
+			margin-bottom: 3px;
 		}
 
 		.asesor-foto-circulo {
 			display: table;
-			width: 70px;
-			height: 70px;
+			width: 100px;
+			height: 100px;
 			border-radius: 50% !important;
 			overflow: hidden;
 			margin: 0 auto 4px auto;
@@ -409,7 +481,7 @@ ob_start();
 
 		.asesor-foto {
 			width: 100px;
-			height: auto;
+			height: 100px;
 			display: inline-block;
 			border: none !important;
 			box-shadow: none !important;
@@ -417,12 +489,9 @@ ob_start();
 
 		.asesor-dato {
 			font-size: 10.5px;
-			line-height: 1.5;
+			line-height: 1.2;
 			margin: 2px 0;
-		}
-
-		.asesor-dato b {
-			font-size: 10.5px;
+			text-align: center;
 		}
 
 		.firma-url {
@@ -472,10 +541,11 @@ ob_start();
 			<!-- ===================== COLUMNA IZQUIERDA ===================== -->
 			<td class="col-left">
 				<div style="text-align:center;"><img src="https://intranet.bostonabregurealty.com/images/logo_negro.png?v=1.1" style="max-width:250px;"></div>
-				<div style="text-align:center; font-size:11px; font-weight:bold; color:#1b2a4a; line-height:1.4; margin-bottom:12px;">AHORA ES MÁS FÁCIL EN HUANCAYO, OXAPAMPA Y SELVA CENTRAL<br> COMPRAR, VENDER Y ALQUILAR TU PROPIEDAD CON GARANTÍA</div>
-				<div class="codigo"><?= htmlspecialchars($codigo) ?> | <?= htmlspecialchars($tipo) ?></div>
+				<div style="text-align:center; font-size:11px; font-weight:bold; color:#1b2a4a; line-height:1.2; margin-bottom:10px;">AHORA ES MÁS FÁCIL EN HUANCAYO, OXAPAMPA Y LIMA<br> COMPRAR, VENDER Y ALQUILAR TU PROPIEDAD CON GARANTÍA</div>
+				<h2 class="seccion" style="text-align:center; ">INFORMACIÓN DE LA PROPIEDAD</h2>
+
 				<h1 class="titulo"><?= htmlspecialchars($titulo) ?></h1>
-				<div class="ubicacion"><?= htmlspecialchars($ubicacion) ?></div>
+				<div class="ubicacion"><b style="color:<?= $colorPrincipal ?>;">DIRECCIÓN:</b> <?= htmlspecialchars($ubicacion) ?></div>
 
 				<h2 class="seccion">Información General</h2>
 				<table class="datos">
@@ -494,18 +564,13 @@ ob_start();
 				<h2 class="seccion">Superficies y Medidas</h2>
 				<table class="datos">
 					<tr>
-						<td>Área de construcción: <b><?= str_replace('m2', 'm²', htmlspecialchars($areaContruccion)) ?></b></td>
 						<td>Área de terreno: <b><?= str_replace('m2', 'm²', htmlspecialchars($terreno)) ?></b></td>
+						<td>Área de construcción: <b><?= str_replace('m2', 'm²', htmlspecialchars($areaContruccion)) ?></b></td>
+						<td>Frontis: <b><?= str_replace('m2', 'm²', htmlspecialchars($frontis)) ?></b></td>
 					</tr>
-					<tr>
-						<td>Sup. descubierta: <b><?= str_replace('m2', 'm²', htmlspecialchars($superficieDescub)) ?></b></td>
-						<td>Sup. semicubierta: <b><?= str_replace('m2', 'm²', htmlspecialchars($superficieSemicub)) ?></b></td>
-						<td>Superficie cubierta: <b><?= str_replace('m2', 'm²', htmlspecialchars($superficieCubierta)) ?></b></td>
 
-					</tr>
 					<tr>
 						<td>Área de cochera: <b><?= str_replace('m2', 'm²', htmlspecialchars($areaCochera)) ?></b></td>
-						<td>Frontis: <b><?= str_replace('m2', 'm²', htmlspecialchars($frontis)) ?></b></td>
 						<td>Azoteas: <b><?= str_replace('m2', 'm²', htmlspecialchars($azoteas)) ?></b></td>
 
 					</tr>
@@ -534,18 +599,19 @@ ob_start();
 						<td>Agua: <b><?= htmlspecialchars($servicioAgua) ?></b></td>
 						<td>Luz: <b><?= htmlspecialchars($servicioLuz) ?></b></td>
 						<td>Desagüe: <b><?= htmlspecialchars($servicioDesague) ?></b></td>
+						<td>Mantenimiento: <b><?= htmlspecialchars($mantenimiento) ?></b></td>
 					</tr>
 				</table>
 
 				<?php if (($row['tipo_operacion'] ?? '') == 'alquiler'): ?>
-				<h2 class="seccion">Condiciones de alquiler</h2>
-				<table class="datos">
-					<tr>
-						<td>Garantía: <b><?= htmlspecialchars($garantia) ?></b></td>
-						<td>Anticipo: <b><?= htmlspecialchars($anticipo) ?></b></td>
-						<td></td>
-					</tr>
-				</table>
+					<h2 class="seccion">Condiciones de alquiler</h2>
+					<table class="datos">
+						<tr>
+							<td>Garantía: <b><?= htmlspecialchars($garantia) ?></b></td>
+							<td>Anticipo: <b><?= htmlspecialchars($anticipo) ?></b></td>
+							<td></td>
+						</tr>
+					</table>
 				<?php endif; ?>
 
 				<div class="nota">
@@ -559,7 +625,7 @@ ob_start();
 				<div class="venta-precio-wrap">
 					<table class="venta-precio">
 						<tr>
-							<td class="badge-venta"><?= strtoupper(htmlspecialchars($tipo)) ." EN ". strtoupper(htmlspecialchars($row['tipo_operacion'] ?? 'VENTA')) ?></td>
+							<td class="badge-venta"><?= strtoupper(htmlspecialchars($tipo)) . " EN " . strtoupper(htmlspecialchars($row['tipo_operacion'] ?? 'VENTA')) ?></td>
 							<td class="precio"><?= str_replace('m2', 'm²', htmlspecialchars($precio)) ?></td>
 						</tr>
 					</table>
@@ -579,7 +645,7 @@ ob_start();
 
 				<table class="grid-fotos">
 					<?php if (count($fotosGrid) > 0): ?>
-						<?php foreach (array_chunk($fotosGrid, 3) as $chunk): ?>
+						<?php foreach (array_chunk($fotosGrid, 2) as $chunk): ?>
 							<tr>
 								<?php foreach ($chunk as $foto): ?>
 									<td><img src="<?= htmlspecialchars($foto) ?>" alt="Foto"></td>
@@ -593,17 +659,17 @@ ob_start();
 					<tr>
 						<td class="col-izq">
 							<span class="asesor-label">ASESOR INMOBILIARIO</span>
-							<?php if ($agenteFotoUrl): ?>
+							<?php if ($agenteFotoBase64): ?>
 								<br>
 								<div class="asesor-foto-circulo">
 									<div class="asesor-foto-celda">
-										<img class="asesor-foto" src="<?= htmlspecialchars($agenteFotoUrl) ?>" alt="Asesor" onerror="this.parentNode.parentNode.style.display='none'">
+										<img class="asesor-foto" src="<?= $agenteFotoBase64 ?>" alt="Asesor">
 									</div>
 								</div>
 							<?php endif; ?>
-							<p class="asesor-dato"><b>Nombre:</b> <?= htmlspecialchars($agenteNombre) ?></p>
-							<p class="asesor-dato"><b>Celular:</b> <?= htmlspecialchars($agenteTelefono) ?></p>
-							<p class="asesor-dato"><b>Correo:</b> <?= htmlspecialchars($agenteEmail) ?></p>
+							<p class="asesor-dato"><b><?= htmlspecialchars($agenteNombre) ?></b></p>
+							<p class="asesor-dato"><?= htmlspecialchars($agenteTelefono) ?></p>
+							<p class="asesor-dato"><?= htmlspecialchars($agenteEmail) ?></p>
 						</td>
 						<td class="col-der">
 							<img class="firma-url" src="<?= htmlspecialchars($firmaUrl) ?>" alt="Firma">

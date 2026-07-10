@@ -1,5 +1,11 @@
-<?php include "conexion.php";
-session_cache_limiter('none');
+<?php include __DIR__ . "/conexion.php";
+if (isset($_COOKIE['ckPower'])) {
+	if ($_COOKIE['ckPower'] == '2') {
+		header('Location: fichas.php');
+	}
+} else {
+	header('Location: index.php');
+}
 ?>
 
 <!DOCTYPE html>
