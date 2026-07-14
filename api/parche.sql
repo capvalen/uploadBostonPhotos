@@ -1,3 +1,7 @@
+--1.7
+ALTER TABLE `fichas` ADD `anios` VARCHAR(250) NULL AFTER `mantenimiento`;
+
+
 --1.6
 ALTER TABLE `fichas` ADD `mantenimiento` VARCHAR(250) NULL AFTER `anticipo`;
 

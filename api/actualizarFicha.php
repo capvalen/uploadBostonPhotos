@@ -30,6 +30,7 @@ $servicioDesague = $cadena->real_escape_string($_POST['txtServicioDesague']);
 $mantenimiento = $cadena->real_escape_string($_POST['txtMantenimiento']);
 $garantia = $cadena->real_escape_string($_POST['txtGarantia']);
 $anticipo = $cadena->real_escape_string($_POST['txtAnticipo']);
+$anios = $cadena->real_escape_string($_POST['txtAnios']);
 $idAsesor = (int)$_POST['txtAsesor'];
 
 $sql = "UPDATE `fichas` SET
@@ -58,6 +59,7 @@ $sql = "UPDATE `fichas` SET
   `mantenimiento` = '{$mantenimiento}',
   `garantia` = '{$garantia}',
   `anticipo` = '{$anticipo}',
+  `anios` = '{$anios}',
   `idAsesor` = {$idAsesor},
   `moneda` = '{$moneda}',
   `tipo_operacion` = '{$_POST['txtOperacion']}'

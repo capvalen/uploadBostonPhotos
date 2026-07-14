@@ -59,6 +59,14 @@ if (isset($_COOKIE['ckPower'])) {
 								<input type="text" class="form-control" name="txtAnticipo" autocomplete="off" placeholder="Ej: 1 mes">
 							</div>
 						</div>
+						<div class="form-row">
+							<div class="col-3">
+								<label for="">Años</label>
+							</div>
+							<div class="col-7">
+								<input type="text" class="form-control" name="txtAnios" autocomplete="off" placeholder="Ej: 2 años">
+							</div>
+						</div>
 					</div>
 					<div class="form-row">
 						<div class="col-3">
@@ -139,8 +147,7 @@ if (isset($_COOKIE['ckPower'])) {
 						<div class="col-7">
 							<input type="text" class="form-control" name="txtAntiguedad" autocomplete="off">
 						</div>
-					</div>
-				</div>
+					</div>				</div>
 			</div>
 
 			<div class="card mt-3">

@@ -21,7 +21,7 @@ $sql = "SELECT `idFicha`, `fichTitulo`, `fichPrecio`, `fichDireccion`, `fichTipo
   `idAsesor`, `fotos`, `moneda`, `beneficios`, `resumen`, `tipo_operacion`,
   `pisos`, `azoteas`, `area_contruccion`, `area_cochera`,
   `servicio_agua`, `servicio_luz`, `servicio_desague`, `mantenimiento`,
-  `garantia`, `anticipo`
+  `garantia`, `anticipo`, `anios`
   FROM `fichas` WHERE idFicha = {$idFicha}";
 /** @var mysqli $cadena */
 $resultado = $cadena->query($sql);
@@ -91,6 +91,14 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 							</div>
 							<div class="col-7">
 								<input type="text" class="form-control" name="txtAnticipo" value="<?= htmlspecialchars($row['anticipo']) ?>" autocomplete="off" placeholder="Ej: 1 mes">
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col-3">
+								<label for="">Años</label>
+							</div>
+							<div class="col-7">
+								<input type="text" class="form-control" name="txtAnios" value="<?= htmlspecialchars($row['anios'] ?? '') ?>" autocomplete="off" placeholder="Ej: 2 años">
 							</div>
 						</div>
 					</div>
@@ -173,8 +181,7 @@ if (!is_array($fotosExistentes)) $fotosExistentes = array();
 						<div class="col-7">
 							<input type="text" class="form-control" name="txtAntiguedad" value="<?= htmlspecialchars($row['antiguedad']) ?>" autocomplete="off">
 						</div>
-					</div>
-				</div>
+					</div>				</div>
 			</div>
 
 			<div class="card mt-3">

@@ -38,7 +38,7 @@ $sql = "SELECT `idFicha`, `fichTitulo`, `fichPrecio`, `moneda`, `fichDireccion`,
   `superficie_descubierta`, `superficie_semicubierta`, `superficie_cubierta`,
   `pisos`, `azoteas`, `area_contruccion`, `area_cochera`,
   `servicio_agua`, `servicio_luz`, `servicio_desague`, `mantenimiento`,
-  `garantia`, `anticipo`
+  `garantia`, `anticipo`, `anios`
   FROM `fichas` WHERE idFicha = {$cursor}";
 /** @var mysqli $cadena */
 $resultado = $cadena->query($sql);
@@ -77,6 +77,7 @@ $servicioDesague     = !empty($row['servicio_desague']) ? $row['servicio_desague
 $mantenimiento       = !empty($row['mantenimiento']) ? $row['mantenimiento'] : '—';
 $garantia            = $row['garantia'] ?? '';
 $anticipo            = $row['anticipo'] ?? '';
+$anios               = $row['anios'] ?? '';
 $terreno             = ($row['fichAreaTerreno'] ?? '-');
 
 $descripcion = $row['fichDescipcion'] ? [$row['fichDescipcion']] : [];
@@ -368,7 +369,7 @@ ob_start();
 		table.venta-precio {
 			margin: 0;
 			border-collapse: collapse;
-			border: 1px solid #c2c2c2;
+			border: 1px solid <?= $colorPrincipal ?>;
 		}
 
 		table.venta-precio td {
@@ -390,6 +391,7 @@ ob_start();
 			color: #1b2a4a;
 			text-align: center;
 			background: #fff;
+			min-width: 150px;
 		}
 
 		.foto-principal {
@@ -447,11 +449,13 @@ ob_start();
 		.asesor-tabla td.col-izq {
 			width: 34%;
 			border-right: 1px solid #ddd;
+			text-align: center;
 		}
 
 		.asesor-tabla td.col-der {
 			width: 66%;
 			text-align: center;
+			vertical-align: middle;
 		}
 
 		.asesor-label {
@@ -571,7 +575,7 @@ ob_start();
 
 					<tr>
 						<td>Área de cochera: <b><?= str_replace('m2', 'm²', htmlspecialchars($areaCochera)) ?></b></td>
-						<td>Azoteas: <b><?= str_replace('m2', 'm²', htmlspecialchars($azoteas)) ?></b></td>
+						<td>Azotea: <b><?= str_replace('m2', 'm²', htmlspecialchars($azoteas)) ?></b></td>
 
 					</tr>
 				</table>
@@ -609,7 +613,7 @@ ob_start();
 						<tr>
 							<td>Garantía: <b><?= htmlspecialchars($garantia) ?></b></td>
 							<td>Anticipo: <b><?= htmlspecialchars($anticipo) ?></b></td>
-							<td></td>
+							<td>Años: <b><?= htmlspecialchars($anios) ?></b></td>
 						</tr>
 					</table>
 				<?php endif; ?>
@@ -626,7 +630,7 @@ ob_start();
 					<table class="venta-precio">
 						<tr>
 							<td class="badge-venta"><?= strtoupper(htmlspecialchars($tipo)) . " EN " . strtoupper(htmlspecialchars($row['tipo_operacion'] ?? 'VENTA')) ?></td>
-							<td class="precio"><?= str_replace('m2', 'm²', htmlspecialchars($precio)) ?></td>
+							<td class="precio">PRECIO: <?= str_replace('m2', 'm²', htmlspecialchars($precio)) ?></td>
 						</tr>
 					</table>
 				</div>
@@ -658,7 +662,6 @@ ob_start();
 				<table class="asesor-tabla">
 					<tr>
 						<td class="col-izq">
-							<span class="asesor-label">ASESOR INMOBILIARIO</span>
 							<?php if ($agenteFotoBase64): ?>
 								<br>
 								<div class="asesor-foto-circulo">
@@ -667,6 +670,7 @@ ob_start();
 									</div>
 								</div>
 							<?php endif; ?>
+							<span class="asesor-label">ASESOR INMOBILIARIO</span>
 							<p class="asesor-dato"><b><?= htmlspecialchars($agenteNombre) ?></b></p>
 							<p class="asesor-dato"><?= htmlspecialchars($agenteTelefono) ?></p>
 							<p class="asesor-dato"><?= htmlspecialchars($agenteEmail) ?></p>
