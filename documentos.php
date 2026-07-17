@@ -1,10 +1,7 @@
 <?php include "conexion.php";
-if( isset($_COOKIE['ckPower'])){
-	if($_COOKIE['ckPower']=='1' && $_COOKIE['ckPower']=='2'){
-	header('Location: ficha.php');    
-	}
-
-}else{ header('Location: index.php'); }
+if( !isset($_COOKIE['ckPower'])){
+	header('Location: index.php');    
+}
 
 ?>
 <!DOCTYPE html>

@@ -1,11 +1,6 @@
 <?php include __DIR__ . "/conexion.php";
-if (isset($_COOKIE['ckPower'])) {
-	if ($_COOKIE['ckPower'] == '2') {
-		header('Location: fichas.php');
-	}
-} else {
+if (!isset($_COOKIE['ckPower'])) 
 	header('Location: index.php');
-}
 ?>
 
 <!DOCTYPE html>

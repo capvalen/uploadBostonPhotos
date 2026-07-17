@@ -1,7 +1,7 @@
 <?php 
 if( isset($_COOKIE['ckPower'])){
 	if($_COOKIE['ckPower']=='2'){
-	header('Location: fichas.php');    
+	header('Location: ficha.php');    
 	}
 
 }else{ header('Location: index.php'); }

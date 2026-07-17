@@ -2,7 +2,7 @@
 include __DIR__ . "/conexion.php";
 if (isset($_COOKIE['ckPower'])) {
 	if ($_COOKIE['ckPower'] == '2') {
-		header('Location: fichas.php');
+		header('Location: ficha.php');
 	}
 } else {
 	header('Location: index.php');
@@ -10,7 +10,7 @@ if (isset($_COOKIE['ckPower'])) {
 
 $idFicha = isset($_GET['cursor']) ? (int)$_GET['cursor'] : 0;
 if (!$idFicha) {
-	header('Location: fichas.php');
+	header('Location: ficha.php');
 	exit;
 }
 
@@ -26,7 +26,7 @@ $sql = "SELECT `idFicha`, `fichTitulo`, `fichPrecio`, `fichDireccion`, `fichTipo
 /** @var mysqli $cadena */
 $resultado = $cadena->query($sql);
 if ($resultado->num_rows !== 1) {
-	header('Location: fichas.php');
+	header('Location: ficha.php');
 	exit;
 }
 $row = $resultado->fetch_assoc();
